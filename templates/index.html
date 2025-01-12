@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image PDF Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"/>
+    <style>
+        .img-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .img-wrap {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .img-wrap img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload and Compress Images</h1>
+    <form id="upload-form" method="POST" action="/compress" enctype="multipart/form-data">
+        <input type="file" id="inputImages" name="images" multiple>
+        <input type="number" name="quality" placeholder="Compression Quality (0-100)" value="50">
+        <input type="hidden" id="crop_coords" name="crop_coords">
+        <button type="submit">Compress & Upload</button>
+    </form>
+
+    <div class="img-container" id="img-preview"></div>
+
+    <h1>Convert Images to PDF</h1>
+    <form id="pdf-form" method="POST" action="/convert_to_pdf" enctype="multipart/form-data">
+        <input type="file" id="inputImagesPDF" name="images" multiple>
+        <input type="number" name="quality" placeholder="Compression Quality (0-100)" value="50">
+        <input type="hidden" id="crop_coords_pdf" name="crop_coords">
+        <button type="submit">Convert to PDF</button>
+    </form>
+
+    <div class="img-container" id="img-preview-pdf"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script>
+        let cropper;
+        let croppers = {}; // A dictionary to hold croppers for each image
+
+        // Function to create image preview tiles
+        function createImagePreview(input, previewContainer) {
+            $(input).change(function(e) {
+                const files = e.target.files;
+                previewContainer.html(''); // Clear previous thumbnails
+
+                Array.from(files).forEach((file, index) => {
+                    const done = (url) => {
+                        const imgId = `image${index}`;
+                        previewContainer.append(`
+                            <div class="img-wrap">
+                                <img id="${imgId}" src="${url}" alt="Image Preview">
+                            </div>
+                        `);
+
+                        const image = document.getElementById(imgId);
+                        cropper = new Cropper(image, {
+                            aspectRatio: NaN,
+                            viewMode: 1
+                        });
+                        croppers[imgId] = cropper;
+                    };
+
+                    if (URL){
+                        done(URL.createObjectURL(file));
+                    } else if (FileReader) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            done(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        }
+
+        // Create previews for upload and pdf forms
+        createImagePreview('#inputImages', $('#img-preview'));
+        createImagePreview('#inputImagesPDF', $('#img-preview-pdf'));
+
+        // Handle form submission
+        $('#upload-form').submit(function(e) {
+            e.preventDefault();
+            let cropDataArray = [];
+
+            for (const imgId in croppers) {
+                const cropData = croppers[imgId].getData(true); // Get cropped area in image coordinates
+                cropDataArray.push(cropData);
+            }
+
+            $('#crop_coords').val(JSON.stringify(cropDataArray));
+            this.submit();
+        });
+
+        $('#pdf-form').submit(function(e) {
+            e.preventDefault();
+            let cropDataArray = [];
+
+            for (const imgId in croppers) {
+                const cropData = croppers[imgId].getData(true); // Get cropped area in image coordinates
+                cropDataArray.push(cropData);
+            }
+
+            $('#crop_coords_pdf').val(JSON.stringify(cropDataArray));
+            this.submit();
+        });
+    </script>
+</body>
+</html>
