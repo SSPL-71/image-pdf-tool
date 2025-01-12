@@ -1,0 +1,14 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore environment configuration
+.env
+
+# Ignore service account and secret files
+service_account_key.json
+client_secrets.json
+
+# Ignore logs & tmp files
+*.log
+tmp/
