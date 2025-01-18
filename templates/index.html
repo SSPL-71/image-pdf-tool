@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Compression and PDF Conversion Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #87CEEB; /* Light blue background */
@@ -15,7 +16,7 @@
             color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background: white;
@@ -57,6 +58,27 @@
             display: block;
             margin-top: 10px;
         }
+        .img-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust spacing between images */
+        }
+        .img-wrap {
+            border: 1px solid #ddd; /* Add a border if desired */
+            padding: 5px;
+            width: 200px; /* Adjust width for better visibility */
+            height: 200px; /* Adjust height for better visibility */
+            overflow: hidden; /* Ensure images fit within the div */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Ensure images fit within the div */
+        }
     </style>
 </head>
 <body>
@@ -65,20 +87,22 @@
         
         <div class="box">
             <h2>Compress Images</h2>
-            <form action="{{ url_for('compress_image') }}" method="post" enctype="multipart/form-data" class="form-group">
+            <form id="compress-form" action="{{ url_for('compress_image') }}" method="post" enctype="multipart/form-data" class="form-group">
                 <label for="images">Select Images to Compress:</label>
-                <input type="file" name="images" multiple>
+                <input type="file" id="inputImages" name="images" multiple>
                 <label for="quality">Compression Quality (1-100):</label>
                 <input type="number" name="quality" value="50">
+                <div class="img-container" id="img-preview"></div>
+                <input type="hidden" id="croppedImages" name="croppedImages">
                 <button type="submit">Compress Images</button>
             </form>
         </div>
 
         <div class="box">
             <h2>Convert Images to PDF</h2>
-            <form action="{{ url_for('convert_to_pdf') }}" method="post" enctype="multipart/form-data" class="form-group">
+            <form id="pdf-form" action="{{ url_for('convert_to_pdf') }}" method="post" enctype="multipart/form-data" class="form-group">
                 <label for="images">Select Images for PDF Conversion:</label>
-                <input type="file" name="images" multiple>
+                <input type="file" id="inputImagesPDF" name="images" multiple>
                 <label for="quality">Quality (1-100):</label>
                 <input type="number" name="quality" value="50">
                 <label for="folder_to_process">Select Folder for PDF Conversion:</label>
@@ -86,9 +110,85 @@
                     <option value="uploads">Direct Upload Folder</option>
                     <option value="compressed">Compressed Folder</option>
                 </select>
+                <div class="img-container" id="img-preview-pdf"></div>
+                <input type="hidden" id="croppedImagesPDF" name="croppedImagesPDF">
                 <button type="submit">Convert to PDF</button>
             </form>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script>
+        function previewImages(input, previewContainer, hiddenInputId) {
+            let cropperInstances = []; // Array to hold cropper instances
+
+            input.addEventListener('change', function() {
+                previewContainer.innerHTML = ''; // Clear previous previews
+                cropperInstances = []; // Clear previous cropper instances
+
+                const files = input.files;
+                for (const file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgWrap = document.createElement('div');
+                        imgWrap.classList.add('img-wrap');
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        imgWrap.appendChild(img);
+                        previewContainer.appendChild(imgWrap);
+
+                        // Initialize Cropper.js on the image
+                        const cropper = new Cropper(img, {
+                            aspectRatio: NaN, // Allow free ratio
+                            viewMode: 1,
+                            autoCropArea: 0.8, // Smaller crop area
+                            guides: true,
+                            highlight: true,
+                            movable: true,
+                            zoomable: true,
+                            rotatable: true,
+                            scalable: true,
+                            cropBoxMovable: true,
+                            cropBoxResizable: true,
+                            background: false
+                        });
+
+                        cropperInstances.push(cropper); // Add cropper instance to array
+
+                        // Capture cropped image data
+                        img.addEventListener('cropend', function() {
+                            const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
+                            const croppedImage = canvas.toDataURL('image/jpeg');
+                            img.src = croppedImage; // Replace the image with the cropped version
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Update hidden input with cropped images data when form is submitted
+            input.closest('form').addEventListener('submit', function(event) {
+                const croppedImagesData = []; // Reset the array each time the form is submitted
+
+                cropperInstances.forEach(cropper => {
+                    const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 }); // Resize to 800x800
+                    const croppedImage = canvas.toDataURL('image/jpeg');
+                    croppedImagesData.push(croppedImage); // Add cropped image data to array
+                });
+
+                const croppedImagesInput = document.getElementById(hiddenInputId);
+                croppedImagesInput.value = JSON.stringify(croppedImagesData); // Convert array to JSON string
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputImages = document.getElementById('inputImages');
+            const imgPreview = document.getElementById('img-preview');
+            previewImages(inputImages, imgPreview, 'croppedImages');
+
+            const inputImagesPDF = document.getElementById('inputImagesPDF');
+            const imgPreviewPDF = document.getElementById('img-preview-pdf');
+            previewImages(inputImagesPDF, imgPreviewPDF, 'croppedImagesPDF');
+        });
+    </script>
 </body>
 </html>
