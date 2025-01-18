@@ -1,33 +1,38 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    python-dev \
-    python3-venv \
-    libpq-dev
+# Use the official Python image from the Docker Hub
+FROM python:3.9-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-ADD . /app
+# Copy the requirements file to the working directory
+COPY requirements.txt .
 
-# Create and activate a virtual environment
-RUN python3 -m venv venv
-RUN . venv/bin/activate
-
-# Ensure pip is up-to-date
+# Upgrade pip
 RUN pip install --upgrade pip
 
-# Install any needed packages specified in requirements.txt
+# Install system dependencies including SWIG
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-dev \
+    python3-venv \
+    libpq-dev \
+    libp11-kit-dev \
+    swig
+
+# Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Run the Flask app
-CMD ["gunicorn", "-b", "0.0.0.0:80", "app:app"]
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+
+# Add a change to ensure detection
+RUN echo "This is a forced change" > /tmp/force-change.txt
+
+# Command to run the application
+CMD ["waitress-serve", "--port=8000", "app:app"]
