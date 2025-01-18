@@ -1,12 +1,8 @@
 import os
-import io
 import json
 from flask import Flask, request, send_file, render_template, redirect, flash
 from PIL import Image
 from fpdf import FPDF
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -19,10 +15,6 @@ PDF_FOLDER = 'pdf_outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(COMPRESSED_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
-
-SCOPES = ['https://www.googleapis.com/auth/drive.file']
-creds = service_account.Credentials.from_service_account_file('service_account_key.json', scopes=SCOPES)
-drive_service = build('drive', 'v3', credentials=creds)
 
 @app.route('/')
 def index():
@@ -62,14 +54,11 @@ def compress_image():
             compressed_image_path = os.path.join(COMPRESSED_FOLDER, file.filename)
             img.save(compressed_image_path, "JPEG", quality=quality)
 
-            file_metadata = {'name': file.filename, 'parents': ['your_folder_id_here']}
-            media = MediaFileUpload(compressed_image_path, mimetype='image/jpeg')
-            drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
         except Exception as e:
             flash(str(e))
             continue  # Skip and process the next file if an error occurs
 
-    flash("Compressed and uploaded successfully!")
+    flash("Compressed successfully!")
     return redirect('/')
 
 @app.route('/convert_to_pdf', methods=['POST'])
