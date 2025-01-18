@@ -1,118 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Image PDF Tool</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compression and PDF Conversion Tool</title>
     <style>
-        .img-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+        body {
+            background-color: #87CEEB; /* Light blue background */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
         }
-        .img-wrap {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
+        h1 {
+            color: #333;
         }
-        .img-wrap img {
-            max-width: 100%;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Align container content to the left */
+        }
+        .box {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        input[type="file"], input[type="number"], select, button {
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="number"], select {
+            padding: 5px;
+            width: 100px; /* Adjusted width to be smaller */
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Upload and Compress Images</h1>
-    <form id="upload-form" method="POST" action="/compress" enctype="multipart/form-data">
-        <input type="file" id="inputImages" name="images" multiple>
-        <input type="number" name="quality" placeholder="Compression Quality (0-100)" value="50">
-        <input type="hidden" id="crop_coords" name="crop_coords">
-        <button type="submit">Compress & Upload</button>
-    </form>
+    <div class="container">
+        <h1>Image Compression and PDF Conversion Tool</h1>
+        
+        <div class="box">
+            <h2>Compress Images</h2>
+            <form action="{{ url_for('compress_image') }}" method="post" enctype="multipart/form-data" class="form-group">
+                <label for="images">Select Images to Compress:</label>
+                <input type="file" name="images" multiple>
+                <label for="quality">Compression Quality (1-100):</label>
+                <input type="number" name="quality" value="50">
+                <button type="submit">Compress Images</button>
+            </form>
+        </div>
 
-    <div class="img-container" id="img-preview"></div>
-
-    <h1>Convert Images to PDF</h1>
-    <form id="pdf-form" method="POST" action="/convert_to_pdf" enctype="multipart/form-data">
-        <input type="file" id="inputImagesPDF" name="images" multiple>
-        <input type="number" name="quality" placeholder="Compression Quality (0-100)" value="50">
-        <input type="hidden" id="crop_coords_pdf" name="crop_coords">
-        <button type="submit">Convert to PDF</button>
-    </form>
-
-    <div class="img-container" id="img-preview-pdf"></div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <script>
-        let cropper;
-        let croppers = {}; // A dictionary to hold croppers for each image
-
-        // Function to create image preview tiles
-        function createImagePreview(input, previewContainer) {
-            $(input).change(function(e) {
-                const files = e.target.files;
-                previewContainer.html(''); // Clear previous thumbnails
-
-                Array.from(files).forEach((file, index) => {
-                    const done = (url) => {
-                        const imgId = `image${index}`;
-                        previewContainer.append(`
-                            <div class="img-wrap">
-                                <img id="${imgId}" src="${url}" alt="Image Preview">
-                            </div>
-                        `);
-
-                        const image = document.getElementById(imgId);
-                        cropper = new Cropper(image, {
-                            aspectRatio: NaN,
-                            viewMode: 1
-                        });
-                        croppers[imgId] = cropper;
-                    };
-
-                    if (URL){
-                        done(URL.createObjectURL(file));
-                    } else if (FileReader) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            done(reader.result);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
-        }
-
-        // Create previews for upload and pdf forms
-        createImagePreview('#inputImages', $('#img-preview'));
-        createImagePreview('#inputImagesPDF', $('#img-preview-pdf'));
-
-        // Handle form submission
-        $('#upload-form').submit(function(e) {
-            e.preventDefault();
-            let cropDataArray = [];
-
-            for (const imgId in croppers) {
-                const cropData = croppers[imgId].getData(true); // Get cropped area in image coordinates
-                cropDataArray.push(cropData);
-            }
-
-            $('#crop_coords').val(JSON.stringify(cropDataArray));
-            this.submit();
-        });
-
-        $('#pdf-form').submit(function(e) {
-            e.preventDefault();
-            let cropDataArray = [];
-
-            for (const imgId in croppers) {
-                const cropData = croppers[imgId].getData(true); // Get cropped area in image coordinates
-                cropDataArray.push(cropData);
-            }
-
-            $('#crop_coords_pdf').val(JSON.stringify(cropDataArray));
-            this.submit();
-        });
-    </script>
+        <div class="box">
+            <h2>Convert Images to PDF</h2>
+            <form action="{{ url_for('convert_to_pdf') }}" method="post" enctype="multipart/form-data" class="form-group">
+                <label for="images">Select Images for PDF Conversion:</label>
+                <input type="file" name="images" multiple>
+                <label for="quality">Quality (1-100):</label>
+                <input type="number" name="quality" value="50">
+                <label for="folder_to_process">Select Folder for PDF Conversion:</label>
+                <select name="folder_to_process">
+                    <option value="uploads">Direct Upload Folder</option>
+                    <option value="compressed">Compressed Folder</option>
+                </select>
+                <button type="submit">Convert to PDF</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
