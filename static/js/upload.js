@@ -122,13 +122,39 @@ function convertToPdf() {
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    let yPosition = 0;
+
     Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
             img.src = e.target.result;
             img.onload = function() {
-                pdf.addImage(img, 'JPEG', 10, 10 + (index * 20), 180, 160);
+                const imgWidth = img.width;
+                const imgHeight = img.height;
+                const aspectRatio = imgWidth / imgHeight;
+
+                if (imgWidth > pageWidth || imgHeight > pageHeight) {
+                    if (aspectRatio > 1) {
+                        imgWidth = pageWidth;
+                        imgHeight = pageWidth / aspectRatio;
+                    } else {
+                        imgWidth = pageHeight * aspectRatio;
+                        imgHeight = pageHeight;
+                    }
+                }
+
+                if (yPosition + imgHeight > pageHeight) {
+                    pdf.addPage();
+                    yPosition = 0;
+                }
+
+                pdf.addImage(img, 'JPEG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
+                yPosition += imgHeight;
+
                 if (index === files.length - 1) {
                     pdf.save('Converted_Images.pdf');
                 }
