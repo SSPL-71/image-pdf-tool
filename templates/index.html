@@ -6,79 +6,7 @@
     <title>Image Tool: Crop, Compress, and Convert to PDF</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #87CEEB; /* Light blue background */
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: left; /* Align container content to the left */
-        }
-        .box {
-            margin: 20px 0;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin: 15px 0;
-        }
-        input[type="file"], input[type="number"], select, button {
-            display: block;
-            margin: 10px 0;
-        }
-        input[type="number"], select {
-            padding: 5px;
-            width: 100px; /* Adjusted width to be smaller */
-            text-align: center;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        .img-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px; /* Adjust spacing between images */
-        }
-        .img-wrap {
-            border: 1px solid #ddd; /* Add a border if desired */
-            padding: 5px;
-            width: 200px; /* Adjust width for better visibility */
-            height: 200px; /* Adjust height for better visibility */
-            overflow: hidden; /* Ensure images fit within the div */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        .img-wrap img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain; /* Ensure images fit within the div */
-        }
+        /* Add your CSS styling here */
     </style>
 </head>
 <body>
@@ -111,132 +39,14 @@
         <div class="box" id="pdf-box" style="display:none;">
             <h2>Step 3: Convert Images to PDF</h2>
             <form id="pdf-form" class="form-group">
-                <label for="folder_to_process">Select Folder for PDF Conversion:</label>
-                <select id="folder_to_process" name="folder_to_process">
-                    <option value="uploads">Direct Upload Folder</option>
-                    <option value="compressed">Compressed Folder</option>
-                </select>
                 <div class="img-container" id="img-preview-pdf"></div>
-                <button type="submit">Convert to PDF</button>
+                <button type="button" id="pdf-button">Convert to PDF</button>
             </form>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <script>
-        let cropperInstances = []; // Array to hold cropper instances
-        let croppedImagesData = [];
-        let compressedImagesData = []; // Array to store compressed images data
-
-        function previewImages(input, previewContainer) {
-            input.addEventListener('change', function() {
-                previewContainer.innerHTML = ''; // Clear previous previews
-                cropperInstances = []; // Clear previous cropper instances
-
-                const files = input.files;
-                for (const file of files) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imgWrap = document.createElement('div');
-                        imgWrap.classList.add('img-wrap');
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        imgWrap.appendChild(img);
-                        previewContainer.appendChild(imgWrap);
-
-                        // Initialize Cropper.js on the image
-                        const cropper = new Cropper(img, {
-                            aspectRatio: NaN, // Allow free ratio
-                            viewMode: 1,
-                            autoCropArea: 0.8, // Smaller crop area
-                            guides: true,
-                            highlight: true,
-                            movable: true,
-                            zoomable: true,
-                            rotatable: true,
-                            scalable: true,
-                            cropBoxMovable: true,
-                            cropBoxResizable: true,
-                            background: false
-                        });
-
-                        cropperInstances.push(cropper); // Add cropper instance to array
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function cropImages() {
-            croppedImagesData = cropperInstances.map(cropper => {
-                const canvas = cropper.getCroppedCanvas();
-                if (canvas) {
-                    return canvas.toDataURL('image/jpeg');
-                }
-                return null;
-            }).filter(data => data !== null);
-
-            if (croppedImagesData.length > 0) {
-                // Update preview for next step
-                const imgPreviewCompress = document.getElementById('img-preview-compress');
-                imgPreviewCompress.innerHTML = croppedImagesData.map(data => `
-                    <div class="img-wrap">
-                        <img src="${data}">
-                    </div>
-                `).join('');
-
-                // Show next box
-                document.getElementById('compress-box').style.display = 'block';
-
-                console.log("Cropped Images Data:", croppedImagesData); // Log for debugging
-            } else {
-                console.error("No cropped images data.");
-            }
-        }
-
-        function compressImages() {
-            const quality = document.getElementById('quality').value / 100;
-            compressedImagesData = croppedImagesData.map(data => {
-                const img = new Image();
-                img.src = data;
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-                return canvas.toDataURL('image/jpeg', quality);
-            });
-
-            if (compressedImagesData.length > 0) {
-                // Update preview for next step
-                const imgPreviewPDF = document.getElementById('img-preview-pdf');
-                imgPreviewPDF.innerHTML = compressedImagesData.map(data => `
-                    <div class="img-wrap">
-                        <img src="${data}">
-                    </div>
-                `).join('');
-
-                // Show next box
-                document.getElementById('pdf-box').style.display = 'block';
-
-                console.log("Compressed Images Data:", compressedImagesData); // Log for debugging
-            } else {
-                console.error("No compressed images data.");
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Step 1: Crop Images
-            const cropImagesInput = document.getElementById('cropImages');
-            const imgPreviewCrop = document.getElementById('img-preview-crop');
-            previewImages(cropImagesInput, imgPreviewCrop);
-
-            const cropButton = document.getElementById('crop-button');
-            cropButton.addEventListener('click', cropImages);
-
-            // Step 2: Compress Images
-            const compressButton = document.getElementById('compress-button');
-            compressButton.addEventListener('click', compressImages);
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="static/js/upload.js"></script>
 </body>
 </html>
