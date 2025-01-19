@@ -99,7 +99,7 @@
         <!-- Step 2: Compress Images -->
         <div class="box" id="compress-box" style="display:none;">
             <h2>Step 2: Compress Images</h2>
-            <form id="compress-form" action="{{ url_for('compress_image') }}" method="post" enctype="multipart/form-data" class="form-group">
+            <form id="compress-form" class="form-group">
                 <label for="quality">Compression Quality (1-100):</label>
                 <input type="number" id="quality" name="quality" value="50">
                 <div class="img-container" id="img-preview-compress"></div>
@@ -107,199 +107,136 @@
             </form>
         </div>
 
-               <!-- Step 3: Convert Images to PDF -->
+        <!-- Step 3: Convert Images to PDF -->
         <div class="box" id="pdf-box" style="display:none;">
             <h2>Step 3: Convert Images to PDF</h2>
             <form id="pdf-form" class="form-group">
-                <label for="pdfImages">Select Images to Convert to PDF:</label>
-                <input type="file" id="pdfImages" name="pdfImages" multiple>
+                <label for="folder_to_process">Select Folder for PDF Conversion:</label>
+                <select id="folder_to_process" name="folder_to_process">
+                    <option value="uploads">Direct Upload Folder</option>
+                    <option value="compressed">Compressed Folder</option>
+                </select>
                 <div class="img-container" id="img-preview-pdf"></div>
-                <button type="button" id="pdf-button">Convert to PDF</button>
+                <button type="submit">Convert to PDF</button>
             </form>
         </div>
-
-
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
-       let cropperInstances = []; // Array to hold cropper instances
-let croppedImagesData = []; // Array to hold cropped image data
+        let cropperInstances = []; // Array to hold cropper instances
+        let croppedImagesData = [];
+        let compressedImagesData = []; // Array to store compressed images data
 
-function previewImages(input, previewContainer, enableCropper = false) {
-    input.addEventListener('change', function() {
-        previewContainer.innerHTML = ''; // Clear previous previews
-        cropperInstances = []; // Clear previous cropper instances
+        function previewImages(input, previewContainer) {
+            input.addEventListener('change', function() {
+                previewContainer.innerHTML = ''; // Clear previous previews
+                cropperInstances = []; // Clear previous cropper instances
 
-        const files = input.files;
-        for (const file of files) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgWrap = document.createElement('div');
-                imgWrap.classList.add('img-wrap');
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                imgWrap.appendChild(img);
-                previewContainer.appendChild(imgWrap);
+                const files = input.files;
+                for (const file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgWrap = document.createElement('div');
+                        imgWrap.classList.add('img-wrap');
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        imgWrap.appendChild(img);
+                        previewContainer.appendChild(imgWrap);
 
-                if (enableCropper) {
-                    // Initialize Cropper.js on the image only if enableCropper is true
-                    const cropper = new Cropper(img, {
-                        aspectRatio: NaN, // Allow free ratio
-                        viewMode: 1,
-                        autoCropArea: 0.8, // Smaller crop area
-                        guides: true,
-                        highlight: true,
-                        movable: true,
-                        zoomable: true,
-                        rotatable: true,
-                        scalable: true,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        background: false
-                    });
+                        // Initialize Cropper.js on the image
+                        const cropper = new Cropper(img, {
+                            aspectRatio: NaN, // Allow free ratio
+                            viewMode: 1,
+                            autoCropArea: 0.8, // Smaller crop area
+                            guides: true,
+                            highlight: true,
+                            movable: true,
+                            zoomable: true,
+                            rotatable: true,
+                            scalable: true,
+                            cropBoxMovable: true,
+                            cropBoxResizable: true,
+                            background: false
+                        });
 
-                    cropperInstances.push({ cropper, name: file.name }); // Add cropper instance and original filename to array
+                        cropperInstances.push(cropper); // Add cropper instance to array
+                    };
+                    reader.readAsDataURL(file);
                 }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
-function cropImages() {
-    croppedImagesData = cropperInstances.map(instance => {
-        const canvas = instance.cropper.getCroppedCanvas();
-        if (canvas) {
-            return canvas.toDataURL('image/jpeg');
-        }
-        return null;
-    }).filter(data => data !== null);
-
-    if (croppedImagesData.length > 0) {
-        // Update preview for next step
-        const imgPreviewCompress = document.getElementById('img-preview-compress');
-        imgPreviewCompress.innerHTML = croppedImagesData.map(data => `
-            <div class="img-wrap">
-                <img src="${data}">
-            </div>
-        `).join('');
-
-        // Show next box
-        document.getElementById('compress-box').style.display = 'block';
-    } else {
-        console.error("No cropped images data.");
-    }
-}
-
-function compressImages() {
-    const quality = document.getElementById('quality').value / 100;
-    const formData = new FormData();
-    console.log('Compress button clicked'); // Debugging log
-
-    // Process each cropped image and create a blob to send to the server
-    let promises = cropperInstances.map((instance, index) => {
-        return new Promise((resolve, reject) => {
-            const canvas = instance.cropper.getCroppedCanvas();
-            if (canvas) {
-                canvas.toBlob(blob => {
-                    const file = new File([blob], instance.name, {type: 'image/jpeg'}); // Use original filename
-                    formData.append('images', file);
-                    console.log(`Blob created for image ${index} with original name ${instance.name}`); // Debugging log
-                    resolve();
-                }, 'image/jpeg', quality);
-            } else {
-                reject('Canvas is not defined');
-            }
-        });
-    });
-
-    // Once all blobs are created, send them to the server
-    Promise.all(promises).then(() => {
-        console.log('All blobs created, sending to server...'); // Debugging log
-        fetch('/compress', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json().catch(() => {
-                // Handle cases where the response is not JSON
-                console.error('Response is not JSON:', response);
-                throw new Error('Response is not JSON');
             });
-        })
-        .then(data => {
-            console.log('Compressed images saved:', data);
-            // Show next box
-            document.getElementById('pdf-box').style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error saving compressed images:', error);
-        });
-    }).catch(error => {
-        console.error('Error creating blobs:', error);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Step 1: Crop Images
-    const cropImagesInput = document.getElementById('cropImages');
-    const imgPreviewCrop = document.getElementById('img-preview-crop');
-    previewImages(cropImagesInput, imgPreviewCrop, true); // Enable cropper for Step 1
-
-    const cropButton = document.getElementById('crop-button');
-    cropButton.addEventListener('click', cropImages);
-
-    // Step 2: Compress Images
-    const compressButton = document.getElementById('compress-button');
-    compressButton.addEventListener('click', compressImages);
-
-    // Step 3: Convert Images to PDF
-    const pdfImagesInput = document.getElementById('pdfImages');
-    const imgPreviewPDF = document.getElementById('img-preview-pdf');
-    previewImages(pdfImagesInput, imgPreviewPDF, false); // Disable cropper for Step 3
-
-    const pdfButton = document.getElementById('pdf-button');
-    pdfButton.addEventListener('click', convertToPDF);
-});
-
-function convertToPDF() {
-    const formData = new FormData();
-    const files = document.getElementById('pdfImages').files;
-    for (const file of files) {
-        formData.append('images', file);
-    }
-
-    fetch('/convert_to_pdf', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
         }
-        return response.blob();
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'output.pdf';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-        console.error('Error converting to PDF:', error);
-    });
-}
 
+        function cropImages() {
+            croppedImagesData = cropperInstances.map(cropper => {
+                const canvas = cropper.getCroppedCanvas();
+                if (canvas) {
+                    return canvas.toDataURL('image/jpeg');
+                }
+                return null;
+            }).filter(data => data !== null);
 
+            if (croppedImagesData.length > 0) {
+                // Update preview for next step
+                const imgPreviewCompress = document.getElementById('img-preview-compress');
+                imgPreviewCompress.innerHTML = croppedImagesData.map(data => `
+                    <div class="img-wrap">
+                        <img src="${data}">
+                    </div>
+                `).join('');
 
+                // Show next box
+                document.getElementById('compress-box').style.display = 'block';
+
+                console.log("Cropped Images Data:", croppedImagesData); // Log for debugging
+            } else {
+                console.error("No cropped images data.");
+            }
+        }
+
+        function compressImages() {
+            const quality = document.getElementById('quality').value / 100;
+            compressedImagesData = croppedImagesData.map(data => {
+                const img = new Image();
+                img.src = data;
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                return canvas.toDataURL('image/jpeg', quality);
+            });
+
+            if (compressedImagesData.length > 0) {
+                // Update preview for next step
+                const imgPreviewPDF = document.getElementById('img-preview-pdf');
+                imgPreviewPDF.innerHTML = compressedImagesData.map(data => `
+                    <div class="img-wrap">
+                        <img src="${data}">
+                    </div>
+                `).join('');
+
+                // Show next box
+                document.getElementById('pdf-box').style.display = 'block';
+
+                console.log("Compressed Images Data:", compressedImagesData); // Log for debugging
+            } else {
+                console.error("No compressed images data.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step 1: Crop Images
+            const cropImagesInput = document.getElementById('cropImages');
+            const imgPreviewCrop = document.getElementById('img-preview-crop');
+            previewImages(cropImagesInput, imgPreviewCrop);
+
+            const cropButton = document.getElementById('crop-button');
+            cropButton.addEventListener('click', cropImages);
+
+            // Step 2: Compress Images
+            const compressButton = document.getElementById('compress-button');
+            compressButton.addEventListener('click', compressImages);
+        });
     </script>
 </body>
 </html>
-
