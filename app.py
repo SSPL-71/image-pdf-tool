@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from flask import Flask, request, jsonify, redirect, flash, render_template, send_file
 from PIL import Image
 from fpdf import FPDF
@@ -15,6 +16,9 @@ PDF_FOLDER = 'pdf_outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(COMPRESSED_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 @app.route('/')
 def index():
@@ -42,11 +46,11 @@ def compress_image():
                 return jsonify(response_data), 400
 
         # Log the directories
-        print(f"UPLOAD_FOLDER: {UPLOAD_FOLDER}")
-        print(f"COMPRESSED_FOLDER: {COMPRESSED_FOLDER}")
-        print(f"PDF_FOLDER: {PDF_FOLDER}")
-        print(f"Current working directory: {os.getcwd()}")
-        print(f"Contents of root directory: {os.listdir('.')}")
+        app.logger.info(f"UPLOAD_FOLDER: {UPLOAD_FOLDER}")
+        app.logger.info(f"COMPRESSED_FOLDER: {COMPRESSED_FOLDER}")
+        app.logger.info(f"PDF_FOLDER: {PDF_FOLDER}")
+        app.logger.info(f"Current working directory: {os.getcwd()}")
+        app.logger.info(f"Contents of root directory: {os.listdir('.')}")
 
         for idx, file in enumerate(files):
             if file.filename == '':
@@ -64,7 +68,7 @@ def compress_image():
                 # Save with original filename
                 compressed_image_path = os.path.join(COMPRESSED_FOLDER, file.filename)
                 img.save(compressed_image_path, "JPEG", quality=quality)
-                print(f"Saved compressed image to {compressed_image_path}")
+                app.logger.info(f"Saved compressed image to {compressed_image_path}")
 
             except Exception as e:
                 response_data["message"] = str(e)
