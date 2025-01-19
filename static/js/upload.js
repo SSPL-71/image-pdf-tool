@@ -1,14 +1,16 @@
 let cropperInstances = []; // Array to hold cropper instances
-let croppedImagesData = [];
-let compressedImagesData = []; // Array to store compressed images data
+let croppedImagesData = []; // Array to store data URIs of cropped images
+let originalFilenames = []; // Array to store original filenames
 
 function previewImages(input, previewContainer) {
     input.addEventListener('change', function() {
         previewContainer.innerHTML = ''; // Clear previous previews
         cropperInstances = []; // Clear previous cropper instances
+        originalFilenames = []; // Clear previous filenames
 
         const files = input.files;
         for (const file of files) {
+            originalFilenames.push(file.name); // Save original filename
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imgWrap = document.createElement('div');
@@ -63,8 +65,14 @@ function cropImages() {
         console.error("No cropped images data.");
     }
 }
+function saveAsFile(content, fileName) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    link.download = fileName;
+    link.click();
+}
 
-function compressImages() {
+async function compressImages() {
     const quality = document.getElementById('quality').value / 100;
     compressedImagesData = croppedImagesData.map((data, index) => {
         const img = new Image();
@@ -74,54 +82,60 @@ function compressImages() {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0, img.width, img.height);
-        const compressedData = canvas.toDataURL('image/jpeg', quality);
-        return compressedData;
+        canvas.toBlob((blob) => {
+            saveAsFile(blob, originalFilenames[index]);
+        }, 'image/jpeg', quality);
+        return {
+            data: canvas.toDataURL('image/jpeg', quality),
+            fileName: originalFilenames[index]
+        };
     });
 
     if (compressedImagesData.length > 0) {
-        const imgPreviewPDF = document.getElementById('img-preview-pdf');
-        imgPreviewPDF.innerHTML = compressedImagesData.map((data, index) => `
-            <div class="img-wrap">
-                <img src="${data}">
-            </div>
-        `).join('');
-
         document.getElementById('pdf-box').style.display = 'block';
-
-        // Save compressed images to zip
-        saveImagesToZip(compressedImagesData, 'Compressed_Images.zip');
     } else {
         console.error("No compressed images data.");
     }
 }
-
-function saveImagesToZip(images, filename) {
-    const zip = new JSZip();
-    images.forEach((data, index) => {
-        const imgData = data.split(',')[1];
-        zip.file(`image_${index}.jpg`, imgData, {base64: true});
-    });
-
-    zip.generateAsync({type: 'blob'}).then(function(content) {
-        saveAs(content, filename);
+function previewPdfImages(input, previewContainer) {
+    input.addEventListener('change', function() {
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const files = input.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgWrap = document.createElement('div');
+                imgWrap.classList.add('img-wrap');
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                imgWrap.appendChild(img);
+                previewContainer.appendChild(imgWrap);
+            };
+            reader.readAsDataURL(file);
+        }
     });
 }
 
 function convertToPdf() {
-    const filenames = compressedImagesData.map((data, index) => `compressed_image_${index}.jpg`);
+    const pdfImagesInput = document.getElementById('pdfImages');
+    const files = pdfImagesInput.files;
 
-    // Logic to convert the selected images to a PDF
-    // Ensure that the PDF is saved to the user's Downloads folder
-    // or the specified folder
-
-    // Example logic for converting images to PDF
+    const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    compressedImagesData.forEach((data, index) => {
-        const img = new Image();
-        img.src = data;
-        pdf.addImage(img, 'JPEG', 10, 10 + (index * 20), 180, 160);
+    Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                pdf.addImage(img, 'JPEG', 10, 10 + (index * 20), 180, 160);
+                if (index === files.length - 1) {
+                    pdf.save('Converted_Images.pdf');
+                }
+            };
+        };
+        reader.readAsDataURL(file);
     });
-    pdf.save('Converted_Images.pdf');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -134,6 +148,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const compressButton = document.getElementById('compress-button');
     compressButton.addEventListener('click', compressImages);
+
+    const pdfImagesInput = document.getElementById('pdfImages');
+    const imgPreviewPdf = document.getElementById('img-preview-pdf');
+    previewPdfImages(pdfImagesInput, imgPreviewPdf);
 
     const pdfButton = document.getElementById('pdf-button');
     pdfButton.addEventListener('click', convertToPdf);
