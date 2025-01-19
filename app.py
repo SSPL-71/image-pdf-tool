@@ -41,6 +41,13 @@ def compress_image():
                 response_data["message"] = f"Invalid crop coordinates: {e}"
                 return jsonify(response_data), 400
 
+        # Log the directories
+        print(f"UPLOAD_FOLDER: {UPLOAD_FOLDER}")
+        print(f"COMPRESSED_FOLDER: {COMPRESSED_FOLDER}")
+        print(f"PDF_FOLDER: {PDF_FOLDER}")
+        print(f"Current working directory: {os.getcwd()}")
+        print(f"Contents of root directory: {os.listdir('.')}")
+
         for idx, file in enumerate(files):
             if file.filename == '':
                 response_data["message"] = "No selected file"
