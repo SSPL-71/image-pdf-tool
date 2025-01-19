@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from flask import Flask, request, jsonify, redirect, flash, render_template, send_file
+from flask import Flask, request, jsonify, redirect, flash, render_template, send_file, send_from_directory
 from PIL import Image
 from fpdf import FPDF
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'cbb4bbcafe1652f607a6cc0c5e79f47c'
 
 UPLOAD_FOLDER = 'uploads'
-COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')
+COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')  # Use absolute path
 PDF_FOLDER = 'pdf_outputs'
 
 # Ensure directories exist
@@ -66,7 +66,7 @@ def compress_image():
                     img = img.crop((coords['x'], coords['y'], coords['x'] + coords['width'], coords['y'] + coords['height']))
 
                 # Use absolute path for saving
-                compressed_image_path = os.path.join(os.getcwd(), COMPRESSED_FOLDER, file.filename)
+                compressed_image_path = os.path.join(COMPRESSED_FOLDER, file.filename)
                 img.save(compressed_image_path, "JPEG", quality=quality)
                 app.logger.info(f"Saved compressed image to {compressed_image_path}")
 
@@ -81,7 +81,6 @@ def compress_image():
         return jsonify(response_data), 500
 
     return jsonify(response_data)
-
 
 @app.route('/convert_to_pdf', methods=['POST'])
 def convert_to_pdf():
@@ -112,6 +111,10 @@ def convert_to_pdf():
 
     flash("PDF created successfully!")
     return send_file(pdf_output_path, mimetype='application/pdf')
+
+@app.route('/compressed_images/<filename>')
+def get_compressed_image(filename):
+    return send_from_directory(COMPRESSED_FOLDER, filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
