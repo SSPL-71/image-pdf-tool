@@ -118,7 +118,12 @@ function previewPdfImages(input, previewContainer) {
 
 function convertToPdf() {
     const pdfImagesInput = document.getElementById('pdfImages');
-    const files = pdfImagesInput.files;
+    const files = Array.from(pdfImagesInput.files);
+
+    if (!files.length) {
+        alert('No images selected for PDF conversion.');
+        return;
+    }
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
@@ -126,8 +131,9 @@ function convertToPdf() {
     const pageHeight = pdf.internal.pageSize.getHeight();
 
     let yPosition = 0;
+    let processedCount = 0;
 
-    Array.from(files).forEach((file, index) => {
+    files.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
@@ -155,7 +161,8 @@ function convertToPdf() {
                 pdf.addImage(img, 'JPEG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
                 yPosition += imgHeight;
 
-                if (index === files.length - 1) {
+                processedCount++;
+                if (processedCount === files.length) {
                     pdf.save('Converted_Images.pdf');
                 }
             };
