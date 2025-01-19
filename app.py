@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'cbb4bbcafe1652f607a6cc0c5e79f47c'
 
 UPLOAD_FOLDER = 'uploads'
-COMPRESSED_FOLDER = 'compressed_outputs'
+COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')
 PDF_FOLDER = 'pdf_outputs'
 
 # Ensure directories exist
@@ -65,8 +65,8 @@ def compress_image():
                     coords = crop_coords[idx]
                     img = img.crop((coords['x'], coords['y'], coords['x'] + coords['width'], coords['y'] + coords['height']))
 
-                # Save with original filename
-                compressed_image_path = os.path.join(COMPRESSED_FOLDER, file.filename)
+                # Use absolute path for saving
+                compressed_image_path = os.path.join(os.getcwd(), COMPRESSED_FOLDER, file.filename)
                 img.save(compressed_image_path, "JPEG", quality=quality)
                 app.logger.info(f"Saved compressed image to {compressed_image_path}")
 
