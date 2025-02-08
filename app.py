@@ -6,6 +6,7 @@ from PIL import Image
 
 app = Flask(__name__)
 app.secret_key = 'cbb4bbcafe1652f607a6cc0c5e79f47c'
+CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
 COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')
@@ -20,11 +21,10 @@ logging.basicConfig(level=logging.INFO)
 # ✅ Enable Cross-Origin Isolation Headers
 @app.after_request
 def add_cors_headers(response):
-    response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
-    response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
-    response.headers['Access-Control-Allow-Origin'] = '*'  # Allow frontend access
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers["Access-Control-Allow-Origin"] = "*"  # Allow all domains (or specify)
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["X-Frame-Options"] = "ALLOWALL"  # Allow iframe embedding
     return response
 
 @app.route('/')
