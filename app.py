@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from flask import Flask, request, jsonify, render_template, send_from_directory, Response
-fron flask_cors import CORS
+from flask_cors import CORS
 from PIL import Image
 
 app = Flask(__name__)
