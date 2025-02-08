@@ -75,5 +75,9 @@ def compress_image():
 def get_compressed_image(filename):
     return send_from_directory(COMPRESSED_FOLDER, filename)
 
+import os
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))  # Render provides PORT dynamically
+    app.run(host="0.0.0.0", port=port)
+
