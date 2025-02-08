@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, Response
 from PIL import Image
 
 app = Flask(__name__)
@@ -17,6 +17,16 @@ os.makedirs(PDF_FOLDER, exist_ok=True)
 
 logging.basicConfig(level=logging.INFO)
 
+# ✅ Enable Cross-Origin Isolation Headers
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
+    response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
+    response.headers['Access-Control-Allow-Origin'] = '*'  # Allow frontend access
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    return response
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -24,7 +34,7 @@ def index():
 @app.route('/compress', methods=['POST'])
 def compress_image():
     response_data = {"success": False, "message": ""}
-    
+
     try:
         files = request.files.getlist('images')
         quality = int(request.form.get('quality', 50))  # Adjust compression quality
