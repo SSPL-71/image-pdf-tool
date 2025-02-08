@@ -22,10 +22,12 @@ logging.basicConfig(level=logging.INFO)
 # ✅ Enable Cross-Origin Isolation Headers
 @app.after_request
 def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"  # Allow all domains (or specify)
+    response.headers["Access-Control-Allow-Origin"] = "*"  
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["X-Frame-Options"] = "ALLOWALL"  # Allow iframe embedding
+    response.headers["X-Frame-Options"] = "ALLOWALL"  
+    response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
     return response
 
 @app.route('/')

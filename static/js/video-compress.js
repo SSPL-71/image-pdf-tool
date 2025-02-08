@@ -1,7 +1,11 @@
-const { createFFmpeg, fetchFile } = FFmpeg;
-const ffmpeg = createFFmpeg({ log: true });
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
-document.addEventListener("DOMContentLoaded", () => {
+const ffmpeg = createFFmpeg({
+    log: true,
+    corePath: 'https://unpkg.com/@ffmpeg/core@latest/ffmpeg-core.js'
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
     const fileInput = document.getElementById("videoFile");
     const qualitySelect = document.getElementById("videoQuality");
     const compressButton = document.getElementById("videocompress-button");
@@ -9,24 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadLink = document.getElementById("download-video");
     const statusMessage = document.getElementById("video-status");
 
-    // ✅ Load FFmpeg when the page loads
-   async function loadFFmpeg() {
-    try {
-        if (!ffmpeg.isLoaded()) {
-            statusMessage.innerText = "Loading FFmpeg...";
-            console.log("Loading FFmpeg...");
-            await ffmpeg.load();
-            console.log("FFmpeg loaded successfully!");
-            statusMessage.innerText = ""; // Remove message after loading
+    // ✅ Load FFmpeg on page load
+    async function loadFFmpeg() {
+        try {
+            if (!ffmpeg.isLoaded()) {
+                statusMessage.innerText = "Loading FFmpeg...";
+                await ffmpeg.load();
+                console.log("FFmpeg loaded successfully!");
+                statusMessage.innerText = ""; // Remove message after loading
+            }
+        } catch (error) {
+            console.error("Error loading FFmpeg:", error);
+            statusMessage.innerText = "Error loading FFmpeg!";
         }
-    } catch (error) {
-        console.error("Error loading FFmpeg:", error);
-        statusMessage.innerText = "Error loading FFmpeg!";
     }
-}
 
-
-    loadFFmpeg(); // Auto-load FFmpeg on page load
+    await loadFFmpeg();
 
     compressButton.addEventListener("click", async (event) => {
         event.preventDefault(); // Prevent form submission
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const quality = qualitySelect.value;
 
-        // ✅ Define the output quality settings
+        // ✅ Define output quality settings
         let bitrate = "800k"; // Default (Medium)
         if (quality === "low") bitrate = "500k";
         if (quality === "high") bitrate = "1500k";
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // ✅ Read the file and write it to FFmpeg's virtual filesystem
             ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(file));
 
-            // ✅ Run FFmpeg command
+            // ✅ Run FFmpeg compression command
             await ffmpeg.run('-i', 'input.mp4', '-b:v', bitrate, '-vf', 'scale=-2:720', 'output.mp4');
 
             // ✅ Get the compressed output
