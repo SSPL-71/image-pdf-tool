@@ -10,20 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusMessage = document.getElementById("video-status");
 
     // ✅ Load FFmpeg when the page loads
-    async function loadFFmpeg() {
-        try {
-            if (!ffmpeg.isLoaded()) {
-                statusMessage.innerText = "Loading FFmpeg...";
-                console.log("Loading FFmpeg...");
-                await ffmpeg.load();
-                console.log("FFmpeg loaded successfully!");
-                statusMessage.innerText = "FFmpeg is ready!";
-            }
-        } catch (error) {
-            console.error("Error loading FFmpeg:", error);
-            statusMessage.innerText = "Error loading FFmpeg!";
+   async function loadFFmpeg() {
+    try {
+        if (!ffmpeg.isLoaded()) {
+            statusMessage.innerText = "Loading FFmpeg...";
+            console.log("Loading FFmpeg...");
+            await ffmpeg.load();
+            console.log("FFmpeg loaded successfully!");
+            statusMessage.innerText = ""; // Remove message after loading
         }
+    } catch (error) {
+        console.error("Error loading FFmpeg:", error);
+        statusMessage.innerText = "Error loading FFmpeg!";
     }
+}
+
 
     loadFFmpeg(); // Auto-load FFmpeg on page load
 
