@@ -126,7 +126,7 @@
 
         <!-- ✅ Step 3: Convert to PDF -->
         <div class="box">
-            <h2>Step 3: Convert Images to PDF</h2>
+            <h2>Step 3: New Feature ! <strong>Sort Images</strong> & Convert Images to PDF</h2>
             <form id="pdf-form">
                 <label for="pdfImages">Select Images to Convert to PDF:</label>
                 <input type="file" id="pdfImages" multiple>
@@ -163,8 +163,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
     <!-- Custom Scripts -->
+    <script>
+        document.getElementById('pdfImages').addEventListener('change', function (e) {
+            const previewContainer = document.getElementById("img-preview-pdf");
+            previewContainer.innerHTML = "";
+            const files = e.target.files;
+
+            Array.from(files).forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const imgWrap = document.createElement("div");
+                    imgWrap.classList.add("img-wrap", "img-sortable");
+
+                    const img = document.createElement("img");
+                    img.src = event.target.result;
+
+                    imgWrap.appendChild(img);
+                    previewContainer.appendChild(imgWrap);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        new Sortable(document.getElementById("img-preview-pdf"), {
+            animation: 150
+        });
+    </script>
     <script src="static/js/upload.js"></script>
     <script src="static/js/video-compress.js"></script>
 

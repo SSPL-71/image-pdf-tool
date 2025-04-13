@@ -97,34 +97,10 @@ async function compressImages() {
         console.error("No compressed images data.");
     }
 }
-function previewPdfImages(input, previewContainer) {
-    input.addEventListener('change', function() {
-        previewContainer.innerHTML = ''; // Clear previous previews
-        const files = input.files;
-        for (const file of files) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgWrap = document.createElement('div');
-                imgWrap.classList.add('img-wrap');
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                imgWrap.appendChild(img);
-                previewContainer.appendChild(imgWrap);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
 
 function convertToPdf() {
-    const pdfImagesInput = document.getElementById('pdfImages');
-    const files = Array.from(pdfImagesInput.files);
-
-    if (!files.length) {
-        alert('No images selected for PDF conversion.');
-        return;
-    }
-
+    const previewContainer = document.getElementById("img-preview-pdf");
+    const imageElements = previewContainer.querySelectorAll(".img-wrap img");
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -133,41 +109,39 @@ function convertToPdf() {
     let yPosition = 0;
     let processedCount = 0;
 
-    files.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                let imgWidth = img.width;
-                let imgHeight = img.height;
-                const aspectRatio = imgWidth / imgHeight;
+    const imageArray = Array.from(imageElements);
 
-                if (imgWidth > pageWidth || imgHeight > pageHeight) {
-                    if (aspectRatio > 1) {
-                        imgWidth = pageWidth;
-                        imgHeight = pageWidth / aspectRatio;
-                    } else {
-                        imgWidth = pageHeight * aspectRatio;
-                        imgHeight = pageHeight;
-                    }
+    imageArray.forEach((imgElement, index) => {
+        const img = new Image();
+        img.src = imgElement.src;
+        img.onload = function () {
+            let imgWidth = img.width;
+            let imgHeight = img.height;
+            const aspectRatio = imgWidth / imgHeight;
+
+            if (imgWidth > pageWidth || imgHeight > pageHeight) {
+                if (aspectRatio > 1) {
+                    imgWidth = pageWidth;
+                    imgHeight = pageWidth / aspectRatio;
+                } else {
+                    imgWidth = pageHeight * aspectRatio;
+                    imgHeight = pageHeight;
                 }
+            }
 
-                if (yPosition + imgHeight > pageHeight) {
-                    pdf.addPage();
-                    yPosition = 0;
-                }
+            if (yPosition + imgHeight > pageHeight) {
+                pdf.addPage();
+                yPosition = 0;
+            }
 
-                pdf.addImage(img, 'JPEG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
-                yPosition += imgHeight;
+            pdf.addImage(img, 'JPEG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
+            yPosition += imgHeight;
 
-                processedCount++;
-                if (processedCount === files.length) {
-                    pdf.save('Converted_Images.pdf');
-                }
-            };
-        };
-        reader.readAsDataURL(file);
+            processedCount++;
+            if (processedCount === imageArray.length) {
+                pdf.save('Converted_Images.pdf');
+            }
+        }
     });
 }
 
@@ -181,10 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const compressButton = document.getElementById('compress-button');
     compressButton.addEventListener('click', compressImages);
-
-    const pdfImagesInput = document.getElementById('pdfImages');
-    const imgPreviewPdf = document.getElementById('img-preview-pdf');
-    previewPdfImages(pdfImagesInput, imgPreviewPdf);
 
     const pdfButton = document.getElementById('pdf-button');
     pdfButton.addEventListener('click', convertToPdf);
