@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from flask import Flask, request, jsonify, render_template, send_from_directory, Response
+from flask import Flask, request, jsonify, render_template, send_from_directory, Response, send_file
 from flask_cors import CORS
 from PIL import Image
 
