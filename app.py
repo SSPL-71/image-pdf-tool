@@ -9,6 +9,11 @@ app = Flask(__name__)
 app.secret_key = 'cbb4bbcafe1652f607a6cc0c5e79f47c'
 CORS(app)
 
+@app.route('/robots.txt')
+def robots_txt():
+    return send_file(os.path.join(os.getcwd(), 'robots.txt'))
+
+
 UPLOAD_FOLDER = 'uploads'
 COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')
 PDF_FOLDER = 'pdf_outputs'
