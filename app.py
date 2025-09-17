@@ -9,10 +9,6 @@ app = Flask(__name__)
 app.secret_key = 'cbb4bbcafe1652f607a6cc0c5e79f47c'
 CORS(app)
 
-@app.route('/robots.txt')
-def robots_txt():
-    return send_file(os.path.join(os.getcwd(), 'robots.txt'))
-
 
 UPLOAD_FOLDER = 'uploads'
 COMPRESSED_FOLDER = os.path.join(os.getcwd(), 'compressed_outputs')
@@ -84,6 +80,14 @@ def get_compressed_image(filename):
     return send_from_directory(COMPRESSED_FOLDER, filename)
 
 import os
+
+@app.route('/BingSiteAuth.xml')
+def bing_verification():
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'BingSiteAuth.xml')
+
+@app.route('/robots.txt')
+def serve_robots():
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'robots.txt')
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  # Render provides PORT dynamically
