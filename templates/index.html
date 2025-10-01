@@ -102,25 +102,30 @@ video {
 </head>
 <body>
 
-    <div class="container">
-<!-- 3CTool Intro Video -->
-<div style="width: 100%; text-align: center; margin: 40px 0;">
-  <h2 style="color: #333;">🎥 See 3CTool in Action</h2>
-  <div style="max-width: 500px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px;">
-    <video autoplay muted loop playsinline
-           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; object-fit: cover;">
-      <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+   <div class="container">
+  <!-- Logo -->
+  <div class="image-container">
+    <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
   </div>
-</div>
-        <div class="image-container">
-            <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
-        </div>
-<div style="text-align: center; margin-top: 30px;">
-  <a href="https://ss-services.co.in" style="color: #333; text-decoration: none; font-weight: bold;">
-    ← Back to SSPL Main Page
-  </a>
+
+  <!-- Back to Main Page Link -->
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="https://ss-services.co.in" style="color: #333; text-decoration: none; font-weight: bold;">
+      ← Back to SSPL Main Page
+    </a>
+  </div>
+
+  <!-- 3CTool Intro Video -->
+  <div style="width: 100%; text-align: center; margin: 40px 0;">
+    <h2 style="color: #333;">🎥 See 3CTool in Action</h2>
+    <div style="max-width: 500px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px;">
+      <video autoplay muted loop playsinline
+             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; object-fit: cover;">
+        <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
 </div>
         <h1>3CTool: Crop - Compress - Convert</h1>
         <p class="subheading">Developed by SSPL</p>
