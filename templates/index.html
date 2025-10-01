@@ -120,12 +120,11 @@ video {
   <p class="subheading">Developed by SSPL</p>
   <p class="tagline">C - the power of your fingers!</p>
 
-  <!-- 3CTool Intro Video -->
+<!-- 3CTool Intro Video -->
 <div style="width: 100%; text-align: center; margin: 40px 0;">
   <h2 style="color: #333;">🎥 See 3CTool in Action</h2>
-  <div style="max-width: 500px; margin: 0 auto; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px;">
-    <video controls playsinline
-           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; object-fit: cover;">
+  <div style="aspect-ratio: 9 / 16; max-width: 300px; margin: auto;">
+    <video controls playsinline style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
       <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
       Your browser does not support the video tag.
     </video>
