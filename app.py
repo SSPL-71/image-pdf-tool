@@ -90,6 +90,6 @@ def serve_robots():
     return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'robots.txt')
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Render provides PORT dynamically
-    app.run(host="0.0.0.0", port=port)
-
+    from waitress import serve
+    port = int(os.environ.get("PORT", 10000))  # Railway sets this dynamically
+    serve(app, host="0.0.0.0", port=port)
