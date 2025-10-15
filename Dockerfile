@@ -35,4 +35,4 @@ ENV FLASK_ENV=production
 RUN echo "This is a forced change" > /tmp/force-change.txt
 
 # Command to run the application
-CMD ["waitress-serve", "--port=8000", "app:app"]
+CMD ["python", "app.py"]
