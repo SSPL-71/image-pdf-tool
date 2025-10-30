@@ -139,12 +139,17 @@ video {
   height: 2px !important;
 }
 
-/* 🎯 Arched Corner Segments — L-shaped with rounded ends */
+/* 🚫 Hide center handles */
+.cropper-point:not(.point-nw):not(.point-ne):not(.point-se):not(.point-sw) {
+  display: none !important;
+}
+
+/* 🎯 Cylindrical Corner Handles */
 .cropper-point {
   position: absolute;
-  width: 20px !important;
-  height: 20px !important;
-  border-radius: 0 10px 0 0; /* Default arch — will override per corner */
+  width: 24px !important;
+  height: 8px !important;
+  border-radius: 4px !important; /* Pill shape */
   opacity: 1 !important;
   z-index: 10;
 }
@@ -152,33 +157,29 @@ video {
 /* 🔵 Top-Left */
 .cropper-point.point-nw {
   background-color: #007bff !important;
-  border-radius: 10px 0 0 0 !important;
-  top: -10px;
-  left: -10px;
+  top: -6px;
+  left: -6px;
 }
 
 /* 🔴 Top-Right */
 .cropper-point.point-ne {
   background-color: #ff0000 !important;
-  border-radius: 0 10px 0 0 !important;
-  top: -10px;
-  right: -10px;
+  top: -6px;
+  right: -6px;
 }
 
 /* 🟠 Bottom-Right */
 .cropper-point.point-se {
   background-color: #ff9800 !important;
-  border-radius: 0 0 10px 0 !important;
-  bottom: -10px;
-  right: -10px;
+  bottom: -6px;
+  right: -6px;
 }
 
 /* 🟢 Bottom-Left */
 .cropper-point.point-sw {
   background-color: #4caf50 !important;
-  border-radius: 0 0 0 10px !important;
-  bottom: -10px;
-  left: -10px;
+  bottom: -6px;
+  left: -6px;
 }
 </style>
 </head>
