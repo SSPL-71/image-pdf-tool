@@ -144,47 +144,42 @@ video {
   display: none !important;
 }
 
-/* 🎯 Cylindrical Corner Handles — Rotated Pills */
+/* 🎯 Pill-Shaped Corner Handles */
 .cropper-point {
   position: absolute;
   width: 24px !important;
   height: 8px !important;
-  border-radius: 999px !important;
+  border-radius: 999px !important; /* Fully rounded ends */
   opacity: 1 !important;
   z-index: 10;
-  transform-origin: center;
 }
 
 /* 🔵 Top-Left */
 .cropper-point.point-nw {
   background-color: #007bff !important;
-  top: -8px;
-  left: -8px;
-  transform: rotate(0deg); /* Horizontal */
+  top: -6px;
+  left: -6px;
 }
 
 /* 🔴 Top-Right */
 .cropper-point.point-ne {
   background-color: #ff0000 !important;
-  top: -8px;
-  right: -8px;
-  transform: rotate(90deg); /* Vertical */
+  top: -6px;
+  right: -6px;
 }
 
 /* 🟠 Bottom-Right */
 .cropper-point.point-se {
   background-color: #ff9800 !important;
-  bottom: -8px;
-  right: -8px;
-  transform: rotate(180deg); /* Horizontal flipped */
+  bottom: -6px;
+  right: -6px;
 }
 
 /* 🟢 Bottom-Left */
 .cropper-point.point-sw {
   background-color: #4caf50 !important;
-  bottom: -8px;
-  left: -8px;
-  transform: rotate(270deg); /* Vertical flipped */
+  bottom: -6px;
+  left: -6px;
 }
 </style>
 </head>
