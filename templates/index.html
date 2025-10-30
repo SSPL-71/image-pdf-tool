@@ -140,6 +140,24 @@ video {
   </div>
 </div>
 
+<!-- Thank You Banner -->
+<div id="thankYouBanner" style="display:none; padding:12px; background:#fff8dc; text-align:center; font-size:16px; font-weight:bold; border:1px solid #ccc; margin-top:20px;"></div>
+
+<script>
+  setTimeout(() => {
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(data => {
+        const city = data.city || 'your city';
+        const banner = document.getElementById('thankYouBanner');
+        banner.innerHTML = `🙏 Thank you, visitor from <strong>${city}</strong>!<br>If this tool helped, please <a href="https://www.ss-services.co.in/#pdf-tools" target="_blank">leave a Like or Star</a>.`;
+        banner.style.display = 'block';
+      })
+      .catch(error => console.error('Geo lookup failed:', error));
+  }, 15000); // 15 seconds delay
+</script>
+
+
 
         <!-- ✅ Step 1: Crop Images -->
         <div class="box">
