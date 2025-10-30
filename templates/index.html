@@ -125,17 +125,18 @@ video {
   50% { opacity: 0.5; transform: scale(1.02); }
   100% { opacity: 1; transform: scale(1); }
 }
+
 /* 🖼️ Crop Box Outline */
 .cropper-crop-box {
-  border: 2px dashed #000000 !important; /* Dark black dashed border */
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3); /* Subtle glow */
+  border: 2px dashed #000 !important; /* Solid black dashed border */
+  box-shadow: none !important; /* No glow */
 }
 
 /* 📏 Edge Lines */
 .cropper-line {
-  background-color: #000000 !important; /* Black edges */
-  width: 4px !important;
-  height: 4px !important;
+  background-color: #000 !important; /* Black edges */
+  width: 2px !important;
+  height: 2px !important;
 }
 
 /* 🎯 Corner Handles — Cylindrical & Colorful */
@@ -144,7 +145,6 @@ video {
   height: 14px !important;
   border-radius: 50%; /* Circular */
   opacity: 1 !important;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 🔵 Top-Left */
@@ -165,8 +165,7 @@ video {
 /* 🟢 Bottom-Left */
 .cropper-point.point-sw {
   background-color: #4caf50 !important; /* Green */
-}
-</style>
+}</style>
 </head>
 <body>
 
