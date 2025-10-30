@@ -125,36 +125,48 @@ video {
   50% { opacity: 0.5; transform: scale(1.02); }
   100% { opacity: 1; transform: scale(1); }
 }
-/* 🎨 Cropper.js Custom Styling */
-
-/* Crop box outline */
+/* 🖼️ Crop Box Outline */
 .cropper-crop-box {
-  border: 2px dashed #ff4081 !important; /* Pink dashed border */
-  box-shadow: 0 0 8px rgba(255, 64, 129, 0.4); /* Soft glow */
+  border: 2px dashed #000000 !important; /* Dark black dashed border */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* Subtle glow */
 }
 
-/* Edge lines (top, right, bottom, left) */
+/* 📏 Edge Lines */
 .cropper-line {
-  background-color: #ff4081 !important; /* Pink */
-  width: 4px !important; /* Thicker line */
+  background-color: #000000 !important; /* Black edges */
+  width: 4px !important;
   height: 4px !important;
 }
 
-/* Corner handles */
+/* 🎯 Corner Handles — Cylindrical & Colorful */
 .cropper-point {
-  background-color: #4caf50 !important; /* Green */
-  width: 12px !important;
-  height: 12px !important;
-  border-radius: 50%;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50%; /* Cylindrical (circular) */
   opacity: 1 !important;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6); /* Subtle glow */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Optional: highlight the crop box when active */
-.cropper-crop-box:active {
-  border-color: #ff9800 !important; /* Orange when dragging */
+/* 🔵 Top-Left */
+.cropper-point.point-e {
+  background-color: #007bff !important; /* Blue */
 }
-    </style>
+
+/* 🔴 Top-Right */
+.cropper-point.point-n {
+  background-color: #ff0000 !important; /* Red */
+}
+
+/* 🟠 Bottom-Right */
+.cropper-point.point-w {
+  background-color: #ff9800 !important; /* Orange */
+}
+
+/* 🟢 Bottom-Left */
+.cropper-point.point-s {
+  background-color: #4caf50 !important; /* Green */
+}
+</style>
 </head>
 <body>
 
