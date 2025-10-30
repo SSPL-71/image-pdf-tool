@@ -107,6 +107,25 @@ video {
 @keyframes fadeIn {
   to { opacity: 1; }
 }
+
+.thank-banner {
+  padding: 12px;
+  background: linear-gradient(90deg, #fff8dc, #ffe4b5);
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  animation: sparkleFade 1.5s ease-in-out;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+@keyframes sparkleFade {
+  0% { opacity: 0; transform: scale(0.95); }
+  50% { opacity: 0.5; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
     </style>
 </head>
 <body>
@@ -141,21 +160,28 @@ video {
 </div>
 
 <!-- Thank You Banner -->
-<div id="thankYouBanner" style="display:none; padding:12px; background:#fff8dc; text-align:center; font-size:16px; font-weight:bold; border:1px solid #ccc; margin-top:20px;"></div>
+<div id="thankYouBanner" style="display:none;" class="thank-banner">
+  🙏 Thank you, visitor from <strong id="userCity">your city</strong>!<br>
+  If this tool helped, please <a href="https://www.ss-services.co.in/#pdf-tools" target="_blank"> Like and Rate 5 Stars</a>.
+  <button onclick="dismissBanner()" style="margin-left:10px;">✖</button>
+</div>
 
 <script>
+  function dismissBanner() {
+    document.getElementById('thankYouBanner').style.display = 'none';
+  }
+
   setTimeout(() => {
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
       .then(data => {
         const city = data.city || 'your city';
-        const banner = document.getElementById('thankYouBanner');
-        banner.innerHTML = `🙏 Thank you, visitor from <strong>${city}</strong>!<br>If this tool helped, please <a href="https://www.ss-services.co.in/#pdf-tools" target="_blank">leave a Like or Star</a>.`;
-        banner.style.display = 'block';
+        document.getElementById('userCity').innerText = city;
+        document.getElementById('thankYouBanner').style.display = 'block';
       })
       .catch(error => console.error('Geo lookup failed:', error));
   }, 15000); // 15 seconds delay
-</script>
+</script><br>
 
 
 
