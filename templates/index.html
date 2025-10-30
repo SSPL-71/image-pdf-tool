@@ -135,37 +135,50 @@ video {
 /* 📏 Edge Lines */
 .cropper-line {
   background-color: #000 !important;
-  width: 4px !important;
-  height: 4px !important;
+  width: 2px !important;
+  height: 2px !important;
 }
 
-/* 🧱 Corner Segments — Cylindrical Blocks */
+/* 🎯 Arched Corner Segments — L-shaped with rounded ends */
 .cropper-point {
+  position: absolute;
   width: 20px !important;
-  height: 6px !important;
-  border-radius: 3px; /* Cylindrical shape */
+  height: 20px !important;
+  border-radius: 0 10px 0 0; /* Default arch — will override per corner */
   opacity: 1 !important;
-  box-shadow: none !important;
+  z-index: 10;
 }
 
 /* 🔵 Top-Left */
 .cropper-point.point-nw {
   background-color: #007bff !important;
+  border-radius: 10px 0 0 0 !important;
+  top: -10px;
+  left: -10px;
 }
 
 /* 🔴 Top-Right */
 .cropper-point.point-ne {
   background-color: #ff0000 !important;
+  border-radius: 0 10px 0 0 !important;
+  top: -10px;
+  right: -10px;
 }
 
 /* 🟠 Bottom-Right */
 .cropper-point.point-se {
   background-color: #ff9800 !important;
+  border-radius: 0 0 10px 0 !important;
+  bottom: -10px;
+  right: -10px;
 }
 
 /* 🟢 Bottom-Left */
 .cropper-point.point-sw {
   background-color: #4caf50 !important;
+  border-radius: 0 0 0 10px !important;
+  bottom: -10px;
+  left: -10px;
 }
 </style>
 </head>
