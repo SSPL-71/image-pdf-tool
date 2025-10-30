@@ -125,7 +125,35 @@ video {
   50% { opacity: 0.5; transform: scale(1.02); }
   100% { opacity: 1; transform: scale(1); }
 }
+/* 🎨 Cropper.js Custom Styling */
 
+/* Crop box outline */
+.cropper-crop-box {
+  border: 2px dashed #ff4081 !important; /* Pink dashed border */
+  box-shadow: 0 0 8px rgba(255, 64, 129, 0.4); /* Soft glow */
+}
+
+/* Edge lines (top, right, bottom, left) */
+.cropper-line {
+  background-color: #ff4081 !important; /* Pink */
+  width: 4px !important; /* Thicker line */
+  height: 4px !important;
+}
+
+/* Corner handles */
+.cropper-point {
+  background-color: #4caf50 !important; /* Green */
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50%;
+  opacity: 1 !important;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6); /* Subtle glow */
+}
+
+/* Optional: highlight the crop box when active */
+.cropper-crop-box:active {
+  border-color: #ff9800 !important; /* Orange when dragging */
+}
     </style>
 </head>
 <body>
