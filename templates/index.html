@@ -227,6 +227,8 @@ video {
   height: 4px;
   bottom: 0;
   right: 0;
+  transform: translateY(-4px); /* ✅ Nudge upward to sit above vertical bar */
+  z-index: 1;
 }
 
 .cropper-point.point-se::after {
@@ -234,6 +236,7 @@ video {
   height: 16px;
   bottom: 0;
   right: 0;
+  z-index: 0;
 }
 </style>
 </head>
