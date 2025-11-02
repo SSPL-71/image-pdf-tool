@@ -129,7 +129,9 @@ video {
 /* 🖼️ Crop Box Outline */
 .cropper-crop-box {
   border: 2px dashed #000 !important; /* Black dashed border */
+  border-radius: 12px !important;     /* Rounded corners */
   box-shadow: none !important;
+  position: relative;
 }
 
 /* 📏 Edge Lines */
@@ -144,7 +146,7 @@ video {
   display: none !important;
 }
 
-/* 🎯 Pill-Shaped Corner Handles */
+/* 🎯 Pill-Shaped Corner Handles — Embedded */
 .cropper-point {
   position: absolute;
   width: 24px !important;
@@ -152,34 +154,35 @@ video {
   border-radius: 999px !important; /* Fully rounded ends */
   opacity: 1 !important;
   z-index: 10;
+  transform: translate(-50%, -50%);
 }
 
 /* 🔵 Top-Left */
 .cropper-point.point-nw {
   background-color: #007bff !important;
-  top: -6px;
-  left: -6px;
+  top: 0;
+  left: 0;
 }
 
 /* 🔴 Top-Right */
 .cropper-point.point-ne {
   background-color: #ff0000 !important;
-  top: -6px;
-  right: -6px;
+  top: 0;
+  left: 100%;
 }
 
 /* 🟠 Bottom-Right */
 .cropper-point.point-se {
   background-color: #ff9800 !important;
-  bottom: -6px;
-  right: -6px;
+  top: 100%;
+  left: 100%;
 }
 
 /* 🟢 Bottom-Left */
 .cropper-point.point-sw {
   background-color: #4caf50 !important;
-  bottom: -6px;
-  left: -6px;
+  top: 100%;
+  left: 0;
 }
 </style>
 </head>
