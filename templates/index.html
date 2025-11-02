@@ -129,7 +129,6 @@ video {
 /* 🖼️ Crop Box Outline */
 .cropper-crop-box {
   border: 2px dashed #000 !important; /* Black dashed border */
-  border-radius: 12px !important;     /* Rounded corners */
   box-shadow: none !important;
   position: relative;
 }
@@ -146,42 +145,92 @@ video {
   display: none !important;
 }
 
-/* 🎯 Pill-Shaped Corner Handles — Embedded */
+/* 🎯 Right-Angled Corner Handles */
 .cropper-point {
   position: absolute;
-  width: 24px !important;
-  height: 8px !important;
-  border-radius: 999px !important; /* Fully rounded ends */
-  opacity: 1 !important;
+  width: 12px !important;
+  height: 12px !important;
+  background-color: transparent !important;
   z-index: 10;
-  transform: translate(-50%, -50%);
 }
 
 /* 🔵 Top-Left */
-.cropper-point.point-nw {
-  background-color: #007bff !important;
+.cropper-point.point-nw::before,
+.cropper-point.point-nw::after {
+  content: '';
+  position: absolute;
+  background-color: #007bff;
+}
+.cropper-point.point-nw::before {
+  width: 12px;
+  height: 2px;
+  top: 0;
+  left: 0;
+}
+.cropper-point.point-nw::after {
+  width: 2px;
+  height: 12px;
   top: 0;
   left: 0;
 }
 
 /* 🔴 Top-Right */
-.cropper-point.point-ne {
-  background-color: #ff0000 !important;
+.cropper-point.point-ne::before,
+.cropper-point.point-ne::after {
+  content: '';
+  position: absolute;
+  background-color: #ff0000;
+}
+.cropper-point.point-ne::before {
+  width: 12px;
+  height: 2px;
   top: 0;
-  left: 100%;
+  right: 0;
+}
+.cropper-point.point-ne::after {
+  width: 2px;
+  height: 12px;
+  top: 0;
+  right: 0;
 }
 
 /* 🟠 Bottom-Right */
-.cropper-point.point-se {
-  background-color: #ff9800 !important;
-  top: 100%;
-  left: 100%;
+.cropper-point.point-se::before,
+.cropper-point.point-se::after {
+  content: '';
+  position: absolute;
+  background-color: #ff9800;
+}
+.cropper-point.point-se::before {
+  width: 12px;
+  height: 2px;
+  bottom: 0;
+  right: 0;
+}
+.cropper-point.point-se::after {
+  width: 2px;
+  height: 12px;
+  bottom: 0;
+  right: 0;
 }
 
 /* 🟢 Bottom-Left */
-.cropper-point.point-sw {
-  background-color: #4caf50 !important;
-  top: 100%;
+.cropper-point.point-sw::before,
+.cropper-point.point-sw::after {
+  content: '';
+  position: absolute;
+  background-color: #4caf50;
+}
+.cropper-point.point-sw::before {
+  width: 12px;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+}
+.cropper-point.point-sw::after {
+  width: 2px;
+  height: 12px;
+  bottom: 0;
   left: 0;
 }
 </style>
