@@ -195,27 +195,22 @@ video {
 }
 
 /* 🟠 Bottom-Right */
-.cropper-point.point-se::before,
-.cropper-point.point-se::after {
+.cropper-point.point-ne::before,
+.cropper-point.point-ne::after {
   content: '';
   position: absolute;
   background-color: #ff9800;
 }
-
-/* Horizontal limb — offset upward slightly */
-.cropper-point.point-se::before {
+.cropper-point.point-ne::before {
   width: 16px;
   height: 4px;
-  bottom: 0;
+  top: 0;
   right: 0;
-  transform: translateY(-4px); /* Shift up so it's not hidden by vertical limb */
 }
-
-/* Vertical limb */
-.cropper-point.point-se::after {
+.cropper-point.point-ne::after {
   width: 4px;
   height: 16px;
-  bottom: 0;
+  top: 0;
   right: 0;
 }
 /* 🟢 Bottom-Left */
