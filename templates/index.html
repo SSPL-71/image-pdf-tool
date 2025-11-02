@@ -202,16 +202,13 @@ video {
   background-color: #ff9800;
 }
 
-/* Horizontal limb — shift down */
 .cropper-point.point-se::before {
   width: 16px;
   height: 4px;
   bottom: 0;
   right: 0;
-transform: translateY(-4px); /* ✅ nudges it above the vertical limb */
 }
 
-/* Vertical limb */
 .cropper-point.point-se::after {
   width: 4px;
   height: 16px;
