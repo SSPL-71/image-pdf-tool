@@ -128,7 +128,7 @@ video {
 
 /* 🖼️ Crop Box Outline */
 .cropper-crop-box {
-  border: 2px dashed #000 !important; /* Black dashed border */
+  border: 2px dashed #000 !important;
   box-shadow: none !important;
   position: relative;
 }
@@ -145,11 +145,11 @@ video {
   display: none !important;
 }
 
-/* 🎯 Right-Angled Corner Handles */
+/* 🎯 Right-Angled Corner Handles — Thicker */
 .cropper-point {
   position: absolute;
-  width: 12px !important;
-  height: 12px !important;
+  width: 16px !important;
+  height: 16px !important;
   background-color: transparent !important;
   z-index: 10;
 }
@@ -162,14 +162,14 @@ video {
   background-color: #007bff;
 }
 .cropper-point.point-nw::before {
-  width: 12px;
-  height: 2px;
+  width: 16px;
+  height: 4px; /* Thicker horizontal */
   top: 0;
   left: 0;
 }
 .cropper-point.point-nw::after {
-  width: 2px;
-  height: 12px;
+  width: 4px; /* Thicker vertical */
+  height: 16px;
   top: 0;
   left: 0;
 }
@@ -182,14 +182,14 @@ video {
   background-color: #ff0000;
 }
 .cropper-point.point-ne::before {
-  width: 12px;
-  height: 2px;
+  width: 16px;
+  height: 4px;
   top: 0;
   right: 0;
 }
 .cropper-point.point-ne::after {
-  width: 2px;
-  height: 12px;
+  width: 4px;
+  height: 16px;
   top: 0;
   right: 0;
 }
@@ -202,14 +202,14 @@ video {
   background-color: #ff9800;
 }
 .cropper-point.point-se::before {
-  width: 12px;
-  height: 2px;
+  width: 16px;
+  height: 4px;
   bottom: 0;
   right: 0;
 }
 .cropper-point.point-se::after {
-  width: 2px;
-  height: 12px;
+  width: 4px;
+  height: 16px;
   bottom: 0;
   right: 0;
 }
@@ -222,14 +222,14 @@ video {
   background-color: #4caf50;
 }
 .cropper-point.point-sw::before {
-  width: 12px;
-  height: 2px;
+  width: 16px;
+  height: 4px;
   bottom: 0;
   left: 0;
 }
 .cropper-point.point-sw::after {
-  width: 2px;
-  height: 12px;
+  width: 4px;
+  height: 16px;
   bottom: 0;
   left: 0;
 }
