@@ -201,12 +201,16 @@ video {
   position: absolute;
   background-color: #ff9800;
 }
+
+/* Horizontal limb — shift down */
 .cropper-point.point-se::before {
   width: 16px;
   height: 4px;
-  top: 0;
+  top: 12px;   /* Push down below vertical limb */
   right: 0;
 }
+
+/* Vertical limb */
 .cropper-point.point-se::after {
   width: 4px;
   height: 16px;
