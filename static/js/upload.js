@@ -46,6 +46,7 @@ function previewImages(input, previewContainer) {
       orangeHorizontal.style.bottom = '0';
       orangeHorizontal.style.right = '0';
       orangeHorizontal.style.zIndex = '1';
+      orangeHorizontal.style.pointerEvents = 'none'; // ✅ This line is key
       seHandle.appendChild(orangeHorizontal);
     }
   }
