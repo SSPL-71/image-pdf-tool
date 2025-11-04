@@ -222,7 +222,14 @@ video {
   background-color: #ff9800;
 }
 
-
+.cropper-point.point-se::before {
+  width: 16px;         /* horizontal length */
+  height: 4px;         /* horizontal thickness */
+  bottom: 0;
+  right: 0;
+  transform: translateY(-4px); /* optional nudge upward */
+  z-index: 1;
+}
 
 .cropper-point.point-se::after {
   width: 16px;
