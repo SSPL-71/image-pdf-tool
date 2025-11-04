@@ -222,16 +222,15 @@ video {
   background-color: #ff9800;
 }
 
-.cropper-point.point-se::before {
-  width: 4px;
-  height: 16px;
+
+
+.cropper-point.point-se::after {
+  width: 16px;
+  height: 4px;
   bottom: 0;
   right: 0;
-  transform: translateY(-0px); /* ✅ Nudge upward to sit above vertical bar */
-  z-index: 1;
+  z-index: 0;
 }
-
-
 </style>
 </head>
 <body>
