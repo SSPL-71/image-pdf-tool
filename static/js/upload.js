@@ -33,8 +33,23 @@ function previewImages(input, previewContainer) {
                     scalable: true,
                     cropBoxMovable: true,
                     cropBoxResizable: true,
-                    background: false
-                });
+                    background: false,
+  		    ready() {
+    // 🛠️ Patch the orange handle
+    const seHandle = imgWrap.querySelector('.cropper-point.point-se');
+    if (seHandle) {
+      const orangeHorizontal = document.createElement('div');
+      orangeHorizontal.style.position = 'absolute';
+      orangeHorizontal.style.width = '16px';
+      orangeHorizontal.style.height = '4px';
+      orangeHorizontal.style.backgroundColor = '#ff9800';
+      orangeHorizontal.style.bottom = '0';
+      orangeHorizontal.style.right = '0';
+      orangeHorizontal.style.zIndex = '1';
+      seHandle.appendChild(orangeHorizontal);
+    }
+  }
+});
 
                 cropperInstances.push(cropper); // Add cropper instance to array
             };
