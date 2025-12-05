@@ -252,26 +252,30 @@
 
     /* 🔒 Fixed header for logo + back link */
     .fixed-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      padding: 10px 20px;
-      border-bottom: 1px solid #ddd;
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .fixed-header img {
-      height: 50px; /* adjust logo size */
-    }
-    .fixed-header a {
-      color: #333;
-      text-decoration: none;
-      font-weight: bold;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: 10px 40px;         /* more generous padding */
+  border-bottom: 1px solid #ddd;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between; /* logo left, link right */
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow to anchor it */
+}
+
+.fixed-header img {
+  height: 60px; /* slightly larger logo for desktop presence */
+}
+
+.fixed-header a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px; /* scale link text for desktop */
+}
 </style>
 
 <body>
