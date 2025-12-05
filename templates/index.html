@@ -32,241 +32,258 @@
 <meta name="twitter:image" content="https://ss-services.co.in/static/images/new_logo.png">
 
 
-    <!-- Styles & Libraries -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #87CEEB;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 { color: #333; }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .box {
-            margin: 20px 0;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-group { margin: 15px 0; }
-        input, select, button {
-            display: block;
-            margin: 10px 0;
-        }
-        input[type="number"], select {
-            padding: 5px;
-            width: 100px;
-            text-align: center;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover { background-color: #45a049; }
-        .img-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        .img-wrap {
-            border: 1px solid #ddd;
-            padding: 5px;
-            width: 200px;
-            height: 200px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-	    margin: 0 auto;   /* <-- this centers the box itself */
-          }
-        .img-wrap img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+<!-- Styles & Libraries -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<style>
+    body {
+        background-color: #87CEEB;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+    }
+    h1 { color: #333; }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+    .box {
+        margin: 20px 0;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group { margin: 15px 0; }
+    input, select, button {
+        display: block;
+        margin: 10px 0;
+    }
+    input[type="number"], select {
+        padding: 5px;
+        width: 100px;
+        text-align: center;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    button:hover { background-color: #45a049; }
+    .img-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+    .img-wrap {
+        border: 1px solid #ddd;
+        padding: 5px;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;   /* <-- this centers the box itself */
+    }
+    .img-wrap img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
 
-.center-block {
-  text-align: center;   /* centers the logo block and text */
-  margin: 0 auto;       /* centers the whole block itself */
-}
+    .center-block {
+      text-align: center;   /* centers the logo block and text */
+      margin: 0 auto;       /* centers the whole block itself */
+    }
 
-.subheading,
-.tagline {
-  margin: 5px 0;
-}
+    .subheading,
+    .tagline {
+      margin: 5px 0;
+    }
 
-video {
-  opacity: 0;
-  animation: fadeIn 1.5s ease-in-out forwards;
-}
+    video {
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
+    }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
 
-.thank-banner {
-  padding: 12px;
-  background: linear-gradient(90deg, #fff8dc, #ffe4b5);
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  animation: sparkleFade 1.5s ease-in-out;
-  box-shadow: 0 0 10px #ffd700;
-}
+    .thank-banner {
+      padding: 12px;
+      background: linear-gradient(90deg, #fff8dc, #ffe4b5);
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      animation: sparkleFade 1.5s ease-in-out;
+      box-shadow: 0 0 10px #ffd700;
+    }
 
-@keyframes sparkleFade {
-  0% { opacity: 0; transform: scale(0.95); }
-  50% { opacity: 0.5; transform: scale(1.02); }
-  100% { opacity: 1; transform: scale(1); }
-}
+    @keyframes sparkleFade {
+      0% { opacity: 0; transform: scale(0.95); }
+      50% { opacity: 0.5; transform: scale(1.02); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
-/* 🖼️ Crop Box Outline */
-.cropper-crop-box {
-  border: 4px dashed #00ffea !important; /* Fluorescent cyan, thicker dashes */
-  box-shadow: 0 0 8px 2px #00ffea !important; /* Soft glow around the box */
-  position: relative;
-}
+    /* 🖼️ Crop Box Outline */
+    .cropper-crop-box {
+      border: 4px dashed #00ffea !important; /* Fluorescent cyan, thicker dashes */
+      box-shadow: 0 0 8px 2px #00ffea !important; /* Soft glow around the box */
+      position: relative;
+    }
 
-/* 📏 Edge Lines */
-.cropper-line {
-  background-color: #000 !important;
-  width: 2px !important;
-  height: 2px !important;
-}
+    /* 📏 Edge Lines */
+    .cropper-line {
+      background-color: #000 !important;
+      width: 2px !important;
+      height: 2px !important;
+    }
 
-/* 🚫 Hide center handles */
-.cropper-point:not(.point-nw):not(.point-ne):not(.point-se):not(.point-sw) {
-  display: none !important;
-}
+    /* 🚫 Hide center handles */
+    .cropper-point:not(.point-nw):not(.point-ne):not(.point-se):not(.point-sw) {
+      display: none !important;
+    }
 
-/* 🎯 Right-Angled Corner Handles — Thicker */
-.cropper-point {
-  position: absolute;
-  width: 16px !important;
-  height: 16px !important;
-  background-color: transparent !important;
-  z-index: 10;
-}
+    /* 🎯 Right-Angled Corner Handles — Thicker */
+    .cropper-point {
+      position: absolute;
+      width: 16px !important;
+      height: 16px !important;
+      background-color: transparent !important;
+      z-index: 10;
+    }
 
-/* 🔵 Top-Left */
-.cropper-point.point-nw::before,
-.cropper-point.point-nw::after {
-  content: '';
-  position: absolute;
-  background-color: #007bff;
-}
-.cropper-point.point-nw::before {
-  width: 16px;
-  height: 4px; /* Thicker horizontal */
-  top: 0;
-  left: 0;
-}
-.cropper-point.point-nw::after {
-  width: 4px; /* Thicker vertical */
-  height: 16px;
-  top: 0;
-  left: 0;
-}
+    /* 🔵 Top-Left */
+    .cropper-point.point-nw::before,
+    .cropper-point.point-nw::after {
+      content: '';
+      position: absolute;
+      background-color: #007bff;
+    }
+    .cropper-point.point-nw::before {
+      width: 16px;
+      height: 4px; /* Thicker horizontal */
+      top: 0;
+      left: 0;
+    }
+    .cropper-point.point-nw::after {
+      width: 4px; /* Thicker vertical */
+      height: 16px;
+      top: 0;
+      left: 0;
+    }
 
-/* 🔴 Top-Right */
-.cropper-point.point-ne::before,
-.cropper-point.point-ne::after {
-  content: '';
-  position: absolute;
-  background-color: #ff0000;
-}
-.cropper-point.point-ne::before {
-  width: 16px;
-  height: 4px;
-  top: 0;
-  right: 0;
-}
-.cropper-point.point-ne::after {
-  width: 4px;
-  height: 16px;
-  top: 0;
-  right: 0;
-}
+    /* 🔴 Top-Right */
+    .cropper-point.point-ne::before,
+    .cropper-point.point-ne::after {
+      content: '';
+      position: absolute;
+      background-color: #ff0000;
+    }
+    .cropper-point.point-ne::before {
+      width: 16px;
+      height: 4px;
+      top: 0;
+      right: 0;
+    }
+    .cropper-point.point-ne::after {
+      width: 4px;
+      height: 16px;
+      top: 0;
+      right: 0;
+    }
 
-/* 🟢 Bottom-Left */
-.cropper-point.point-sw::before,
-.cropper-point.point-sw::after {
-  content: '';
-  position: absolute;
-  background-color: #4caf50;
-}
-.cropper-point.point-sw::before {
-  width: 16px;
-  height: 4px;
-  bottom: 0;
-  left: 0;
-}
-.cropper-point.point-sw::after {
-  width: 4px;
-  height: 16px;
-  bottom: 0;
-  left: 0;
-}
+    /* 🟢 Bottom-Left */
+    .cropper-point.point-sw::before,
+    .cropper-point.point-sw::after {
+      content: '';
+      position: absolute;
+      background-color: #4caf50;
+    }
+    .cropper-point.point-sw::before {
+      width: 16px;
+      height: 4px;
+      bottom: 0;
+      left: 0;
+    }
+    .cropper-point.point-sw::after {
+      width: 4px;
+      height: 16px;
+      bottom: 0;
+      left: 0;
+    }
 
-/* 🟠 Bottom-Right */
-.cropper-point.point-se::before,
-.cropper-point.point-se::after {
-  content: '';
-  position: absolute;
-  background-color: #ff9800;
-}
+    /* 🟠 Bottom-Right */
+    .cropper-point.point-se::before,
+    .cropper-point.point-se::after {
+      content: '';
+      position: absolute;
+      background-color: #ff9800;
+    }
 
-.cropper-point.point-se::before {
-  width: 16px;         /* horizontal length */
-  height: 4px;         /* horizontal thickness */
-  bottom: 0;
-  right: 0;
-  transform: translateY(-4px); /* optional nudge upward */
-  z-index: 1;
-}
+    .cropper-point.point-se::before {
+      width: 16px;         /* horizontal length */
+      height: 4px;         /* horizontal thickness */
+      bottom: 0;
+      right: 0;
+      transform: translateY(-4px); /* optional nudge upward */
+      z-index: 1;
+    }
 
-.cropper-point.point-se::after {
-  width: 4px;
-  height: 16px;
-  bottom: 0;
-  right: 0;
-  z-index: 0;
-}
+    .cropper-point.point-se::after {
+      width: 4px;
+      height: 16px;
+      bottom: 0;
+      right: 0;
+      z-index: 0;
+    }
+
+    /* 🔒 Fixed header for logo + back link */
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ddd;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .fixed-header img {
+      height: 50px; /* adjust logo size */
+    }
+    .fixed-header a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
 </style>
-</head>
+
 <body>
-
-   <div class="container">
-  <!-- Logo -->
-  <div class="image-container">
-    <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
+  <!-- Fixed Header -->
+  <div class="fixed-header">
+    <div class="image-container">
+      <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
+    </div>
+    <div>
+      <a href="https://ss-services.co.in">← Back to SSPL Main Page</a>
+    </div>
   </div>
-
-
-
-  <!-- Back to Main Page Link -->
-  <div style="text-align: right; margin-top: 30px;">
-    <a href="https://ss-services.co.in" style="color: #333; text-decoration: none; font-weight: bold;">
-      ← Back to SSPL Main Page
-    </a>
-  </div><br><br>
 
   <!-- Headings -->
 <div class="center-block">
