@@ -43,22 +43,29 @@
     }
     h1 { color: #333; }
     .container {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;   /* centers text */
+  max-width: 800px;          /* wider so all tools fit comfortably */
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  text-align: center;
 }
 
+/* Make .box sections look like subsections, not separate cards */
 .box {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;   /* centers text */
+  margin: 20px 0;
+  padding: 20px;
+  background: transparent;   /* remove separate background */
+  border-radius: 0;          /* no rounded corners */
+  box-shadow: none;          /* remove shadow */
+  border-bottom: 1px solid #eee; /* subtle divider line */
+  text-align: center;
+}
+
+/* Optional: last box without divider */
+.box:last-child {
+  border-bottom: none;
 }
 
 .form-group { 
