@@ -35,280 +35,498 @@
 <!-- Styles & Libraries -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <style>
-    body {
-        background-color: #87CEEB;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 20px;
-    }
-    h1 { color: #333; }
-    .container {
-  max-width: 800px;          /* wider so all tools fit comfortably */
+
+/* === Global Layout & Typography === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #0f172a 0, #020617 38%, #000 100%);
+  color: #e5e7eb;
+}
+
+/* We’ll center almost everything and give room below the fixed header */
+.center-block,
+.container {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 30px;
-  background: white;         /* unified white box */
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+}
+
+.center-block {
+  margin-top: 90px; /* clears fixed header */
+  padding: 16px 16px 0;
   text-align: center;
 }
 
-/* Make .box sections look like subsections, not separate cards */
-.box {
-  margin: 20px 0;
-  padding: 20px;
-  background: transparent;   /* remove separate background */
-  border-radius: 0;          /* no rounded corners */
-  box-shadow: none;          /* remove shadow */
-  border-bottom: 1px solid #eee; /* subtle divider line */
-  text-align: center;
+h1, h2 {
+  color: #e5e7eb;
+  margin-top: 0;
 }
 
-/* Optional: last box without divider */
-.box:last-child {
-  border-bottom: none;
+p {
+  color: #9ca3af;
 }
 
-.form-group { 
-    margin: 15px 0; 
-}
-
-/* ✅ Center inputs, selects, and buttons */
-input, select, button {
-    display: block;
-    margin: 10px auto;   /* auto left/right margins center the block */
-}
-
-input[type="number"], select {
-    padding: 5px;
-    width: 100px;
-    text-align: center;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-button:hover { 
-    background-color: #45a049; 
-}
-
-.img-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center; /* centers images */
-}
-    .img-wrap {
-        border: none;
-        padding: 5px;
-        width: 200px;
-        height: 200px;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto;   /* <-- this centers the box itself */
-        background: transparent; /* <-- add this line */
-	}
-    .img-wrap img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-
-    .center-block {
-      text-align: center;   /* centers the logo block and text */
-      margin: 0 auto;       /* centers the whole block itself */
-    }
-
-    .subheading,
-    .tagline {
-      margin: 5px 0;
-    }
-
-    video {
-      opacity: 0;
-      animation: fadeIn 1.5s ease-in-out forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    .thank-banner {
-      padding: 12px;
-      background: linear-gradient(90deg, #fff8dc, #ffe4b5);
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      border: 1px solid #ccc;
-      margin-top: 20px;
-      animation: sparkleFade 1.5s ease-in-out;
-      box-shadow: 0 0 10px #ffd700;
-    }
-
-    @keyframes sparkleFade {
-      0% { opacity: 0; transform: scale(0.95); }
-      50% { opacity: 0.5; transform: scale(1.02); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    /* 🖼️ Crop Box Outline */
-    .cropper-crop-box {
-      border: 4px dashed #00ffea !important; /* Fluorescent cyan, thicker dashes */
-      box-shadow: 0 0 8px 2px #00ffea !important; /* Soft glow around the box */
-      position: relative;
-    }
-
-    /* 📏 Edge Lines */
-    .cropper-line {
-      background-color: #000 !important;
-      width: 2px !important;
-      height: 2px !important;
-    }
-
-    /* 🚫 Hide center handles */
-    .cropper-point:not(.point-nw):not(.point-ne):not(.point-se):not(.point-sw) {
-      display: none !important;
-    }
-
-    /* 🎯 Right-Angled Corner Handles — Thicker */
-    .cropper-point {
-      position: absolute;
-      width: 16px !important;
-      height: 16px !important;
-      background-color: transparent !important;
-      z-index: 10;
-    }
-
-    /* 🔵 Top-Left */
-    .cropper-point.point-nw::before,
-    .cropper-point.point-nw::after {
-      content: '';
-      position: absolute;
-      background-color: #007bff;
-    }
-    .cropper-point.point-nw::before {
-      width: 16px;
-      height: 4px; /* Thicker horizontal */
-      top: 0;
-      left: 0;
-    }
-    .cropper-point.point-nw::after {
-      width: 4px; /* Thicker vertical */
-      height: 16px;
-      top: 0;
-      left: 0;
-    }
-
-    /* 🔴 Top-Right */
-    .cropper-point.point-ne::before,
-    .cropper-point.point-ne::after {
-      content: '';
-      position: absolute;
-      background-color: #ff0000;
-    }
-    .cropper-point.point-ne::before {
-      width: 16px;
-      height: 4px;
-      top: 0;
-      right: 0;
-    }
-    .cropper-point.point-ne::after {
-      width: 4px;
-      height: 16px;
-      top: 0;
-      right: 0;
-    }
-
-    /* 🟢 Bottom-Left */
-    .cropper-point.point-sw::before,
-    .cropper-point.point-sw::after {
-      content: '';
-      position: absolute;
-      background-color: #4caf50;
-    }
-    .cropper-point.point-sw::before {
-      width: 16px;
-      height: 4px;
-      bottom: 0;
-      left: 0;
-    }
-    .cropper-point.point-sw::after {
-      width: 4px;
-      height: 16px;
-      bottom: 0;
-      left: 0;
-    }
-
-    /* 🟠 Bottom-Right */
-    .cropper-point.point-se::before,
-    .cropper-point.point-se::after {
-      content: '';
-      position: absolute;
-      background-color: #ff9800;
-    }
-
-    .cropper-point.point-se::before {
-      width: 16px;         /* horizontal length */
-      height: 4px;         /* horizontal thickness */
-      bottom: 0;
-      right: 0;
-      transform: translateY(-4px); /* optional nudge upward */
-      z-index: 1;
-    }
-
-    .cropper-point.point-se::after {
-      width: 4px;
-      height: 16px;
-      bottom: 0;
-      right: 0;
-      z-index: 0;
-    }
-
-    /* 🔒 Fixed header for logo + back link */
-    .fixed-header {
+/* === Fixed Header / Brand Bar === */
+.fixed-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: #fff;
-  padding: 10px 40px;         /* more generous padding */
-  border-bottom: 1px solid #ddd;
+  background: linear-gradient(90deg, #020617, #020617 40%, #030712 100%);
+  padding: 10px 32px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
   z-index: 1000;
   display: flex;
-  justify-content: space-between; /* logo left, link right */
+  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow to anchor it */
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.55);
 }
 
-.fixed-header img {
-  height: 20px;        /* keep logo size */
-  }
+.fixed-header .image-container img {
+  height: 24px;
+  display: block;
+}
 
 .fixed-header a {
-  color: #333;
+  color: #e5e7eb;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 16px; /* scale link text for desktop */
+  font-weight: 600;
+  font-size: 15px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.35), transparent 55%);
+  transition: background 150ms ease, box-shadow 150ms ease, transform 120ms ease, border-color 150ms ease;
 }
-.thank-banner {
-  max-width: 800px;       /* match your container width */
-  margin: 20px auto;      /* center horizontally */
-  padding: 12px;
-  background: linear-gradient(90deg, #fff8dc, #ffe4b5);
+
+.fixed-header a:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.6), rgba(15, 23, 42, 0.98));
+  transform: translateY(-1px);
+}
+
+/* === Logo / Tagline Block === */
+.img-wrap {
+  border: none;
+  padding: 10px;
+  width: 220px;
+  height: 220px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 8px;
+  background: radial-gradient(circle at top, rgba(30, 64, 175, 0.3), rgba(15, 23, 42, 0.98));
+  border-radius: 999px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+}
+
+.img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.subheading,
+.tagline {
+  margin: 4px 0;
+  color: #e5e7eb;
+}
+
+/* === Video Section === */
+.center-block + div {
+  /* this is the inline-styled video wrapper; just enhance */
   text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px #ffd700;
-  border-radius: 8px;     /* optional: match container rounding */
 }
+
+.center-block + div h2 {
+  margin-bottom: 10px;
+}
+
+.center-block + div h2 {
+  color: #e5e7eb;
+}
+
+.center-block + div div {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+  background: radial-gradient(circle at top, rgba(30, 64, 175, 0.6), rgba(15, 23, 42, 0.98));
+}
+
+/* Fade-in video already defined; we just keep it neat */
+video {
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+/* === Thank You Banner === */
+.thank-banner {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid rgba(250, 204, 21, 0.75);
+  box-shadow: 0 0 22px rgba(250, 204, 21, 0.4);
+  border-radius: 10px;
+  color: #fef3c7;
+}
+
+.thank-banner a {
+  color: #fde68a;
+  text-decoration: underline;
+}
+
+.thank-banner button {
+  margin-left: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: #020617;
+  color: #e5e7eb;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+@keyframes sparkleFade {
+  0% { opacity: 0; transform: scale(0.95); }
+  50% { opacity: 0.5; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* === Main Container & Step Cards === */
+.container {
+  max-width: 1000px;
+  margin: 24px auto 60px;
+  padding: 22px 18px 30px;
+  background: radial-gradient(circle at top, rgba(30, 64, 175, 0.28), rgba(15, 23, 42, 0.98));
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+/* Step boxes become neat cards */
+.box {
+  margin: 20px 0;
+  padding: 18px 16px 20px;
+  background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), #020617);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.85);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 60%);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.box h2 {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.box form,
+.box p,
+.box label,
+.box .img-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Form layout */
+.form-group {
+  margin: 15px 0;
+}
+
+/* Inputs / selects */
+input, select, button {
+  display: block;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+input[type="file"] {
+  padding: 8px;
+  max-width: 100%;
+  color: #e5e7eb;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+input[type="number"], select {
+  padding: 8px 10px;
+  width: 120px;
+  text-align: center;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.85);
+  background: #020617;
+  color: #e5e7eb;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+input[type="number"]:focus,
+select:focus,
+input[type="file"]:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+}
+
+/* Labels */
+label {
+  font-size: 13px;
+  color: #cbd5f5;
+  margin-bottom: 4px;
+}
+
+/* === Buttons: dark professional with subtle glow (Option B) === */
+button,
+.tool-button-like {
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.95));
+  color: #f9fafb;
+  border: 1px solid rgba(191, 219, 254, 0.8);
+  padding: 9px 18px;
+  cursor: pointer;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+  transition: transform 120ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+button:hover,
+.tool-button-like:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.9);
+  border-color: #38bdf8;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 1), rgba(37, 99, 235, 1));
+}
+
+button:active,
+.tool-button-like:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.9);
+}
+
+/* Inline note under crop input */
+.box p[style] {
+  color: #cbd5f5 !important;
+}
+
+/* === Image / Preview Grid === */
+.img-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.img-container .img-wrap {
+  width: 180px;
+  height: 180px;
+  margin: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at top, rgba(30, 64, 175, 0.6), rgba(15, 23, 42, 0.98));
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+}
+
+/* === Video Preview / Status === */
+#video-status {
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+#preview-video {
+  margin-top: 10px;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.95);
+}
+
+#download-video {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+/* === Cropper Customization (preserved, with dark context) === */
+.cropper-crop-box {
+  border: 4px dashed #00ffea !important;
+  box-shadow: 0 0 8px 2px #00ffea !important;
+  position: relative;
+}
+
+.cropper-line {
+  background-color: #000 !important;
+  width: 2px !important;
+  height: 2px !important;
+}
+
+.cropper-point:not(.point-nw):not(.point-ne):not(.point-se):not(.point-sw) {
+  display: none !important;
+}
+
+.cropper-point {
+  position: absolute;
+  width: 16px !important;
+  height: 16px !important;
+  background-color: transparent !important;
+  z-index: 10;
+}
+
+/* Top-left */
+.cropper-point.point-nw::before,
+.cropper-point.point-nw::after {
+  content: '';
+  position: absolute;
+  background-color: #007bff;
+}
+
+.cropper-point.point-nw::before {
+  width: 16px;
+  height: 4px;
+  top: 0;
+  left: 0;
+}
+
+.cropper-point.point-nw::after {
+  width: 4px;
+  height: 16px;
+  top: 0;
+  left: 0;
+}
+
+/* Top-right */
+.cropper-point.point-ne::before,
+.cropper-point.point-ne::after {
+  content: '';
+  position: absolute;
+  background-color: #ff0000;
+}
+
+.cropper-point.point-ne::before {
+  width: 16px;
+  height: 4px;
+  top: 0;
+  right: 0;
+}
+
+.cropper-point.point-ne::after {
+  width: 4px;
+  height: 16px;
+  top: 0;
+  right: 0;
+}
+
+/* Bottom-left */
+.cropper-point.point-sw::before,
+.cropper-point.point-sw::after {
+  content: '';
+  position: absolute;
+  background-color: #4caf50;
+}
+
+.cropper-point.point-sw::before {
+  width: 16px;
+  height: 4px;
+  bottom: 0;
+  left: 0;
+}
+
+.cropper-point.point-sw::after {
+  width: 4px;
+  height: 16px;
+  bottom: 0;
+  left: 0;
+}
+
+/* Bottom-right */
+.cropper-point.point-se::before,
+.cropper-point.point-se::after {
+  content: '';
+  position: absolute;
+  background-color: #ff9800;
+}
+
+.cropper-point.point-se::before {
+  width: 16px;
+  height: 4px;
+  bottom: 0;
+  right: 0;
+  transform: translateY(-4px);
+  z-index: 1;
+}
+
+.cropper-point.point-se::after {
+  width: 4px;
+  height: 16px;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+/* === Footer === */
+footer {
+  max-width: 1000px;
+  margin: 0 auto 24px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(55, 65, 81, 0.9);
+  font-size: 11px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fixed-header {
+    padding: 10px 16px;
+  }
+  .fixed-header a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+  .container {
+    margin: 20px 10px 50px;
+    padding: 18px 14px 24px;
+  }
+  .box {
+    padding: 16px 12px 18px;
+  }
+  .img-container {
+    justify-content: center;
+  }
+  .img-container .img-wrap {
+    width: 150px;
+    height: 150px;
+  }
+}
+
 </style>
 
 <body>
