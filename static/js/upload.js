@@ -2,6 +2,8 @@ let cropperInstances = [];      // Array to hold cropper instances
 let croppedImagesData = [];     // Array to store data URIs of cropped images
 let originalFilenames = [];     // Array to store original filenames
 let compressedImagesData = [];  // Array to store compressed images (data URL + filename)
+let compressionCompleted = false;
+
 
 // Preview & init croppers
 function previewImages(input, previewContainer) {
@@ -11,6 +13,7 @@ function previewImages(input, previewContainer) {
         originalFilenames = [];          // Clear previous filenames
         croppedImagesData = [];
         compressedImagesData = [];
+       compressionCompleted = false; // ✅ ADD THIS LINE
 
         const files = input.files;
         for (const file of files) {
@@ -28,6 +31,7 @@ function previewImages(input, previewContainer) {
                 const cropper = new Cropper(img, {
                     aspectRatio: NaN, // Allow free ratio
                     viewMode: 1,
+                    responsive: false,
                     autoCropArea: 0.8, // Smaller crop area
                     guides: true,
                     highlight: true,
@@ -100,6 +104,7 @@ function saveAsFile(content, fileName) {
 }
 
 // Compress cropped images, download JPEGs, and prepare for PDF
+// Compress cropped images and show decision options
 async function compressImages() {
     if (!croppedImagesData.length) {
         console.error("No cropped images to compress.");
@@ -110,16 +115,11 @@ async function compressImages() {
     compressedImagesData = [];
 
     const imgPreviewCompress = document.getElementById('img-preview-compress');
-    const imgPreviewPdf = document.getElementById('img-preview-pdf');
-
-    // Optional: show we are refreshing previews
     imgPreviewCompress.innerHTML = '';
 
-    // Process images one by one to avoid race issues
     for (let i = 0; i < croppedImagesData.length; i++) {
         const src = croppedImagesData[i];
 
-        // Wait until image is fully loaded before drawing/compressing
         const compressedItem = await new Promise((resolve) => {
             const img = new Image();
             img.onload = function () {
@@ -130,18 +130,12 @@ async function compressImages() {
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0, img.width, img.height);
 
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        // Download compressed file with original filename
-                        saveAsFile(blob, originalFilenames[i]);
-                    }
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
 
-                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                    resolve({
-                        data: dataUrl,
-                        fileName: originalFilenames[i]
-                    });
-                }, 'image/jpeg', quality);
+                resolve({
+                    data: dataUrl,
+                    fileName: originalFilenames[i]
+                });
             };
             img.src = src;
         });
@@ -149,25 +143,47 @@ async function compressImages() {
         compressedImagesData.push(compressedItem);
     }
 
-    // Update compressed preview (visual)
-    if (compressedImagesData.length > 0) {
-        const html = compressedImagesData.map(item => `
-            <div class="img-wrap">
-                <img src="${item.data}">
-            </div>
-        `).join('');
-        imgPreviewCompress.innerHTML = html;
+    compressionCompleted = true;
 
-        // Also populate PDF preview container with compressed images
-        if (imgPreviewPdf) {
-            imgPreviewPdf.innerHTML = html;
-        }
+document.getElementById('post-compress-choice').style.display = 'block';
 
-        document.getElementById('pdf-box').style.display = 'block';
-    } else {
-        console.error("No compressed images data.");
+
+    // Update compressed preview
+    imgPreviewCompress.innerHTML = compressedImagesData.map(item => `
+        <div class="img-wrap">
+            <img src="${item.data}">
+        </div>
+    `).join('');
+
+    // 🔑 Show decision UI AFTER compression
+    const decisionBox = document.getElementById('download-option');
+    if (decisionBox) {
+        decisionBox.style.display = 'block';
     }
 }
+
+// Download all compressed images
+function downloadCompressedImages() {
+    if (!compressedImagesData.length) return;
+
+    compressedImagesData.forEach((item) => {
+        const blob = fetch(item.data).then(res => res.blob());
+        blob.then(b => saveAsFile(b, item.fileName));
+    });
+}
+
+// Move compressed images to PDF preview area
+function proceedToPdf() {
+    if (!compressedImagesData.length) return;
+
+    const imgPreviewPdf = document.getElementById('img-preview-pdf');
+    imgPreviewPdf.innerHTML = compressedImagesData.map(item => `
+        <div class="img-wrap">
+            <img src="${item.data}">
+        </div>
+    `).join('');
+}
+
 
 // Convert (compressed) images to PDF with correct sizing
 async function convertToPdf() {
@@ -247,6 +263,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const compressButton = document.getElementById('compress-button');
     compressButton.addEventListener('click', compressImages);
+
+document.getElementById('download-compressed-btn')
+  ?.addEventListener('click', downloadCompressedImages);
+
+document.getElementById('proceed-to-pdf-btn')
+  ?.addEventListener('click', proceedToPdf);
+
 
     const pdfButton = document.getElementById('pdf-button');
     pdfButton.addEventListener('click', convertToPdf);

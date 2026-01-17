@@ -91,6 +91,11 @@ p {
   height: 24px;
   display: block;
 }
+/* Step 1: Prevent mobile auto-resizing inside CropperJS */
+.cropper-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
 
 .fixed-header a {
   color: #e5e7eb;
@@ -526,6 +531,31 @@ footer {
     height: 150px;
   }
 }
+/* Post-compression decision buttons layout */
+#post-compress-choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Desktop: buttons side by side */
+#post-compress-choice button {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Mobile: stack buttons */
+@media (max-width: 600px) {
+  #post-compress-choice {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #post-compress-choice button {
+    width: 100%;
+  }
+}
 
 
 </style>
@@ -602,16 +632,37 @@ footer {
 </form>
         </div>
 
-        <!-- ✅ Step 2: Compress Images -->
-        <div class="box">
-            <h2>Step 2: Compress Images</h2>
-            <form id="compress-form">
-                <label for="quality">Compression Quality (1-100):</label>
-                <input type="number" id="quality" value="50">
-                <div class="img-container" id="img-preview-compress"></div>
-                <button type="button" id="compress-button">Compress Images</button>
-            </form>
-        </div>
+<!-- ✅ Step 2: Compress Images -->
+<div class="box">
+  <h2>Step 2: Compress Images</h2>
+
+  <form id="compress-form">
+    <label for="quality">Compression Quality (1-100):</label>
+    <input type="number" id="quality" value="50">
+
+    <!-- Preview of images AFTER compression -->
+    <div class="img-container" id="img-preview-compress"></div>
+
+    <!-- Compress trigger -->
+    <button type="button" id="compress-button">Compress Images</button>
+
+    <!-- 🔽 POST-COMPRESSION DECISION (HIDDEN INITIALLY) -->
+    <div id="post-compress-choice" style="display:none; margin-top:16px;">
+      <p style="font-weight:600; margin-bottom:8px;">
+        What do you want to do next?
+      </p>
+
+      <button type="button" id="download-compressed-btn">
+        Download Compressed Images
+      </button>
+
+      <button type="button" id="proceed-to-pdf-btn" style="margin-left:10px;">
+        Proceed to PDF Conversion
+      </button>
+    </div>
+  </form>
+</div>
+
 
         <!-- ✅ Step 3: Convert to PDF -->
         <div class="box">
@@ -687,7 +738,7 @@ footer {
 
   <!-- Footer -->
   <footer>
-    © 2025 Sarvasiddhanta Services Private Limited (SSPL). All rights reserved.
+    © 2026 Sarvasiddhanta Services Private Limited (SSPL). All rights reserved.
   </footer>
 
 
