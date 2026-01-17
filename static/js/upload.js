@@ -192,26 +192,21 @@ async function convertToPdf() {
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    // Prefer compressed images (what user actually downloads),
-    // but fall back to images shown in pdf preview if needed.
-    let sources = [];
+    // Always respect user sorting in PDF preview
+const previewContainer = document.getElementById("img-preview-pdf");
+if (!previewContainer) {
+    console.error("PDF preview container not found.");
+    return;
+}
 
-    if (compressedImagesData.length) {
-        sources = compressedImagesData.map(item => item.data);
-    } else {
-        const previewContainer = document.getElementById("img-preview-pdf");
-        if (!previewContainer) {
-            console.error("No PDF preview container or compressed images.");
-            return;
-        }
-        const imageElements = previewContainer.querySelectorAll(".img-wrap img");
-        sources = Array.from(imageElements).map(img => img.src);
-    }
+const imageElements = previewContainer.querySelectorAll(".img-wrap img");
+const sources = Array.from(imageElements).map(img => img.src);
 
-    if (!sources.length) {
-        console.error("No images found for PDF conversion.");
-        return;
-    }
+if (!sources.length) {
+    console.error("No images found for PDF conversion.");
+    return;
+}
+
 
     // Process sequentially to preserve order
     for (let i = 0; i < sources.length; i++) {
