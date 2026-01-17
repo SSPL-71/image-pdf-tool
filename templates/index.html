@@ -616,21 +616,48 @@ footer {
 
 
 
-        <!-- ✅ Step 1: Crop Images -->
-	<div class="container">      
-	<div class="box">
-            <h2>Step 1: Crop Images</h2>
-            <form id="crop-form">
-  <label for="cropImages">Select Images to Crop:</label>
-  <input type="file" id="cropImages" multiple><br>
-  <p style="font-size: 14px; color: #555; margin-top: -10px; font-weight: bold;">
-  You can select up to 10 images at a time.
-</p>
-  
-  <div class="img-container" id="img-preview-crop"></div>
-  <button type="button" id="crop-button">Crop Images</button>
-</form>
-        </div>
+<!-- ✅ Step 1: Crop Images -->
+<div class="container">
+  <div class="box">
+    <h2>Step 1: Crop Images</h2>
+
+    <form id="crop-form">
+      <label for="cropImages">Select Images to Crop:</label>
+      <input type="file" id="cropImages" multiple><br>
+
+      <p style="font-size: 14px; color: #555; margin-top: -10px; font-weight: bold;">
+        You can select up to 10 images at a time.
+      </p>
+
+      <div class="img-container" id="img-preview-crop"></div>
+
+      <button type="button" id="crop-button">Crop Images</button>
+    </form>
+  </div>
+</div>
+
+<!-- 🔍 GA Tracking for Step 1 (SAFE, USER-ONLY EVENTS) -->
+<script>
+  // Track image upload (human signal)
+  document.getElementById('cropImages')?.addEventListener('change', function () {
+    if (this.files && this.files.length > 0) {
+      gtag('event', 'file_uploaded', {
+        tool_name: '3CTool',
+        step: 'crop',
+        file_count: this.files.length
+      });
+    }
+  });
+
+  // Track crop button click (tool action)
+  document.getElementById('crop-button')?.addEventListener('click', function () {
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      action_name: 'crop_images'
+    });
+  });
+</script>
+
 
 <!-- ✅ Step 2: Compress Images -->
 <div class="box">
@@ -663,6 +690,38 @@ footer {
   </form>
 </div>
 
+<!-- 🔍 GA Tracking for Step 2: Compress Images -->
+<script>
+  // Track compress button click
+  document.getElementById('compress-button')?.addEventListener('click', function () {
+    const quality = document.getElementById('quality')?.value || null;
+
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'compress',
+      action_name: 'compress_images',
+      compression_quality: quality
+    });
+  });
+
+  // Track download compressed images decision
+  document.getElementById('download-compressed-btn')?.addEventListener('click', function () {
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'compress',
+      action_name: 'download_compressed_images'
+    });
+  });
+
+  // Track proceed to PDF decision
+  document.getElementById('proceed-to-pdf-btn')?.addEventListener('click', function () {
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'compress',
+      action_name: 'proceed_to_pdf'
+    });
+  });
+</script>
 
         <!-- ✅ Step 3: Convert to PDF -->
         <div class="box">
@@ -674,6 +733,30 @@ footer {
                 <button type="button" id="pdf-button">Convert to PDF</button>
             </form>
         </div>
+
+<!-- 🔍 GA Tracking for Step 3: Convert to PDF -->
+<script>
+  // Track image selection for PDF (manual upload path)
+  document.getElementById('pdfImages')?.addEventListener('change', function () {
+    if (this.files && this.files.length > 0) {
+      gtag('event', 'file_uploaded', {
+        tool_name: '3CTool',
+        step: 'pdf',
+        file_count: this.files.length,
+        source: 'manual_pdf_upload'
+      });
+    }
+  });
+
+  // Track Convert to PDF action
+  document.getElementById('pdf-button')?.addEventListener('click', function () {
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'pdf',
+      action_name: 'convert_to_pdf'
+    });
+  });
+</script>
 
         <!-- ✅ Step 4: Video Compression -->
         <div class="box">
@@ -698,6 +781,42 @@ footer {
         </div>
     </div>
 </div>
+
+<!-- 🔍 GA Tracking for Step 4: Video Compression -->
+<script>
+  // Track video file selection
+  document.getElementById('videoFile')?.addEventListener('change', function () {
+    if (this.files && this.files.length > 0) {
+      gtag('event', 'file_uploaded', {
+        tool_name: '3CTool',
+        step: 'video_compression',
+        file_type: 'video',
+        file_count: 1
+      });
+    }
+  });
+
+  // Track video compression trigger
+  document.getElementById('videocompress-button')?.addEventListener('click', function () {
+    const quality = document.getElementById('videoQuality')?.value || 'unknown';
+
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'video_compression',
+      action_name: 'compress_video',
+      quality_selected: quality
+    });
+  });
+
+  // Track video download (when shown/clicked)
+  document.getElementById('download-video')?.addEventListener('click', function () {
+    gtag('event', 'tool_action', {
+      tool_name: '3CTool',
+      step: 'video_compression',
+      action_name: 'download_compressed_video'
+    });
+  });
+</script>
 
     <!-- JS Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
