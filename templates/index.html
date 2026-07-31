@@ -598,6 +598,65 @@ footer {
   <button onclick="dismissBanner()" style="margin-left:10px;">✖</button>
 </div>
 
+<div id="caseSection"
+     style="display:none;
+            max-width:900px;
+            margin:20px auto;
+            padding:18px;
+            background:#111827;
+            border:1px solid #374151;
+            border-radius:12px;
+            text-align:center;">
+
+    <label for="caseSelector"
+           style="display:block;
+                  margin-bottom:10px;
+                  font-weight:600;
+                  color:#e5e7eb;">
+        📂 Select Case
+    </label>
+
+    <select id="caseSelector"
+            style="width:320px;
+                   max-width:100%;
+                   padding:10px;
+                   border-radius:8px;">
+        <option value="">-- Choose a case --</option>
+    </select>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+
+if (token) {
+    window.THETA_TOKEN = token;
+
+    window.addEventListener("load", () => {
+        if (typeof window.loadCases === "function") {
+            window.loadCases();
+        }
+    });
+}
+</script>
+
+<script>
+window.addEventListener("load", () => {
+
+    const caseSection = document.getElementById("caseSection");
+
+    if (!caseSection) return;
+
+    if (window.THETA_TOKEN) {
+        caseSection.style.display = "block";
+    } else {
+        caseSection.style.display = "none";
+    }
+
+});
+</script>
+
 <script>
   function dismissBanner() {
     document.getElementById('thankYouBanner').style.display = 'none';
