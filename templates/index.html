@@ -660,58 +660,56 @@ window.addEventListener("load", () => {
 </script>
 
 <script>
+console.log("Page loaded and script running...");
+
 window.loadCases = async function () {
+  try {
 
-    if (!window.THETA_TOKEN) return;
+    const tokenPayload = JSON.parse(
+      atob(window.THETA_TOKEN.split(".")[1])
+    );
 
-    try {
+    const endpoint =
+      tokenPayload.role === "investigator"
+        ? "https://gentrac.onrender.com/api/cases/my-assigned"
+        : "https://gentrac.onrender.com/api/cases";
 
-        const payload = JSON.parse(atob(window.THETA_TOKEN.split('.')[1]));
+    const response = await fetch(endpoint, {
+      headers: {
+        Authorization: `Bearer ${window.THETA_TOKEN}`
+      }
+    });
 
-        const endpoint =
-            payload.role === "investigator"
-                ? "https://gentrac.onrender.com/api/cases/my-assigned"
-                : "https://gentrac.onrender.com/api/cases";
+    const cases = await response.json();
 
-        const response = await fetch(endpoint, {
-            headers: {
-                Authorization: `Bearer ${window.THETA_TOKEN}`
-            }
-        });
+    const selector = document.getElementById("caseSelector");
 
-        if (!response.ok) {
-            console.error("Unable to load cases");
-            return;
-        }
+    selector.innerHTML = '<option value="">-- Choose a case --</option>';
 
-const cases = await response.json();
-
-alert(JSON.stringify(cases[0], null, 2));
-
-        const selector = document.getElementById("caseSelector");
-
-        selector.innerHTML =
-            '<option value="">-- Choose a case --</option>';
-
-        cases.forEach(c => {
-
-            const option = document.createElement("option");
-
-            option.value = c.id;
-
-option.textContent =
-    `${c.claim_number || c.serial_number || ""} - ${c.intake_data?.insured_name || ""}`;
-
-            selector.appendChild(option);
-
-        });
-
-    } catch (err) {
-
-        console.error(err);
-
+    if (!Array.isArray(cases)) {
+      console.error("Invalid cases response:", cases);
+      return;
     }
 
+    cases.forEach(c => {
+      const option = document.createElement("option");
+      option.value = c.id;
+
+      const insuredName =
+        c.intake_data?.insured_name ||
+        c.intake_data?.Insured_Name ||
+        "Case";
+
+      option.textContent = `${c.serial_number} - ${insuredName}`;
+
+      selector.appendChild(option);
+    });
+
+    selector.disabled = false;
+
+  } catch (err) {
+    console.error("❌ Failed to load cases:", err);
+  }
 };
 </script>
 
