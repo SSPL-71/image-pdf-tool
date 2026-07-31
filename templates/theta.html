@@ -561,43 +561,7 @@ footer {
 </style>
 
 <body>
-  <!-- Fixed Header -->
-  <div class="fixed-header">
-    <div class="image-container">
-      <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
-    </div>
-    <div>
-      <a href="https://ss-services.co.in">← Back to SSPL Main Page</a>
-    </div>
-  </div>
-
-  <!-- Headings -->
-<div class="center-block">
-  <div class="img-wrap">
-    <img src="{{ url_for('static', filename='images/3CTool.png') }}" alt="3CTool">
-  </div>
-  <p class="subheading">Developed By </p>
-<p class="subheading">Sarvasiddhanta Services Private Limited </p>
-  <p class="tagline">For Theta !</p>
-</div>
-
-<!-- 3CTool Intro Video -->
-<div style="width: 100%; text-align: center; margin: 40px 0;">
-  <h2 style="color: #333;">🎥 See 3CTool in Action</h2>
-  <div style="aspect-ratio: 9 / 16; max-width: 300px; margin: auto;">
-    <video controls playsinline style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
-      <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</div>
-<!-- Thank You Banner -->
-<div id="thankYouBanner" style="display:none;" class="thank-banner">
-  🙏 Thank you, visitor from <strong id="userCity">your city</strong>!<br>
-  If this tool helped, please <a href="https://www.ss-services.co.in/#feedback" target="_blank"> Like and Rate 5 Stars</a>.
-  <button onclick="dismissBanner()" style="margin-left:10px;">✖</button>
-</div>
-
+  
 <div id="caseSection"
      style="display:none;
             max-width:900px;
