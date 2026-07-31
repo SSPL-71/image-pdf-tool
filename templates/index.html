@@ -686,7 +686,7 @@ window.loadCases = async function () {
 
 const cases = await response.json();
 
-alert(JSON.stringify(cases[0].intake_data, null, 2));
+alert(JSON.stringify(cases[0], null, 2));
 
         const selector = document.getElementById("caseSelector");
 
