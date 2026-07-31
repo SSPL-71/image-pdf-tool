@@ -658,6 +658,60 @@ window.addEventListener("load", () => {
 </script>
 
 <script>
+window.loadCases = async function () {
+
+    if (!window.THETA_TOKEN) return;
+
+    try {
+
+        const payload = JSON.parse(atob(window.THETA_TOKEN.split('.')[1]));
+
+        const endpoint =
+            payload.role === "investigator"
+                ? "https://gentrac.onrender.com/api/cases/my-assigned"
+                : "https://gentrac.onrender.com/api/cases";
+
+        const response = await fetch(endpoint, {
+            headers: {
+                Authorization: `Bearer ${window.THETA_TOKEN}`
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Unable to load cases");
+            return;
+        }
+
+        const cases = await response.json();
+
+        const selector = document.getElementById("caseSelector");
+
+        selector.innerHTML =
+            '<option value="">-- Choose a case --</option>';
+
+        cases.forEach(c => {
+
+            const option = document.createElement("option");
+
+            option.value = c.id;
+
+            option.textContent =
+                `${c.case_number || ""} - ${c.insured_name || ""}`;
+
+            selector.appendChild(option);
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+};
+</script>
+
+<script>
   function dismissBanner() {
     document.getElementById('thankYouBanner').style.display = 'none';
   }
