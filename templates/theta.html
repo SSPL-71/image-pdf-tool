@@ -687,6 +687,7 @@ selector.addEventListener("change", async function () {
 
     const images = await response.json();
 
+console.log("Images returned:", images.length);
 const preview = document.getElementById("img-preview-crop");
 preview.innerHTML = "";
 
