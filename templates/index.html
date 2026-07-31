@@ -686,7 +686,7 @@ alert("loadCases called");
 
 const cases = await response.json();
 
-alert(JSON.stringify(cases[0], null, 2));
+alert(Object.keys(cases[0]).join("\n"));
 
         const selector = document.getElementById("caseSelector");
 
