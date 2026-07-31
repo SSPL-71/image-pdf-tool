@@ -694,11 +694,22 @@ images.forEach((image) => {
     const imgWrap = document.createElement("div");
     imgWrap.className = "img-wrap";
 
-    const img = document.createElement("img");
+const img = document.createElement("img");
 
-    img.src = `https://gentrac.onrender.com/api/drive/image/${image.id}`;
+const response = await fetch(
+    `https://gentrac.onrender.com/api/drive/image/${image.id}`,
+    {
+        headers: {
+            Authorization: `Bearer ${window.THETA_TOKEN}`
+        }
+    }
+);
 
-    img.loading = "lazy";
+const blob = await response.blob();
+
+img.src = URL.createObjectURL(blob);
+
+img.loading = "lazy";
 
     imgWrap.appendChild(img);
     preview.appendChild(imgWrap);
