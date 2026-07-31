@@ -35,6 +35,10 @@ def add_cors_headers(response):
 def index():
     return render_template('index.html')
 
+@app.route('/theta.html')
+def theta():
+    return render_template('theta.html')
+
 @app.route('/compress', methods=['POST'])
 def compress_image():
     response_data = {"success": False, "message": ""}
