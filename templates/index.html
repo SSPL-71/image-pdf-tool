@@ -699,8 +699,8 @@ alert(Object.keys(cases[0]).join("\n"));
 
             option.value = c.id;
 
-            option.textContent =
-                `${c.case_number || ""} - ${c.insured_name || ""}`;
+option.textContent =
+    `${c.claim_number || c.serial_number || ""} - ${c.intake_data?.insured_name || ""}`;
 
             selector.appendChild(option);
 
