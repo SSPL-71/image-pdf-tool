@@ -661,7 +661,7 @@ window.addEventListener("load", () => {
 
 <script>
 window.loadCases = async function () {
-alert("loadCases called");
+
     if (!window.THETA_TOKEN) return;
 
     try {
@@ -686,7 +686,7 @@ alert("loadCases called");
 
 const cases = await response.json();
 
-alert(Object.keys(cases[0]).join("\n"));
+alert(JSON.stringify(cases[0].intake_data, null, 2));
 
         const selector = document.getElementById("caseSelector");
 
