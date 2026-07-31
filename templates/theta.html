@@ -687,8 +687,22 @@ selector.addEventListener("change", async function () {
 
     const images = await response.json();
 
-    console.log("Case Images:");
-    console.log(images);
+const preview = document.getElementById("img-preview-crop");
+preview.innerHTML = "";
+
+images.forEach((image) => {
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "img-wrap";
+
+    const img = document.createElement("img");
+
+    img.src = `https://gentrac.onrender.com/api/drive/image/${image.id}`;
+
+    img.loading = "lazy";
+
+    imgWrap.appendChild(img);
+    preview.appendChild(imgWrap);
+});
 
 });
 
