@@ -190,11 +190,16 @@ const pdfBlob = pdf.output("blob");
 console.log("Blob size:", pdfBlob.size);
     const formData = new FormData();
     formData.append("file", pdfBlob, "Converted_Images.pdf");
+console.log("Uploading to:", `/upload_pdf/${window.selectedCaseId}`);
+const response = await fetch(`/upload_pdf/${window.selectedCaseId}`, {
+    method: "POST",
+    body: formData
+});
 
-    await fetch(`/upload_pdf/${window.selectedCaseId}`, {
-        method: "POST",
-        body: formData
-    });
+console.log("Upload status:", response.status);
+
+const result = await response.text();
+console.log(result);
 }
 
 
