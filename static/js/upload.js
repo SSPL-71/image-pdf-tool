@@ -183,7 +183,11 @@ console.log("Loaded image", i);
     }
 
     // 🔹 ONLY THIS LINE CHANGED
-    const pdfBlob = pdf.output('blob');
+   console.log("Loop finished");
+console.log("Pages:", pdf.internal.getNumberOfPages());
+
+const pdfBlob = pdf.output("blob");
+console.log("Blob size:", pdfBlob.size);
     const formData = new FormData();
     formData.append("file", pdfBlob, "Converted_Images.pdf");
 
