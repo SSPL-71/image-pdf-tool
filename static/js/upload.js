@@ -153,9 +153,9 @@ async function convertToPdf() {
     for (let i = 0; i < sources.length; i++) {
         await new Promise(resolve => {
             const img = new Image();
-console.log("Loading", i);
+
             img.onload = function () {
-console.log("Loaded image", i);
+
                 let w = img.width;
                 let h = img.height;
                 const ratio = w / h;
@@ -183,14 +183,13 @@ console.log("Loaded image", i);
     }
 
     // 🔹 ONLY THIS LINE CHANGED
-   console.log("Loop finished");
-console.log("Pages:", pdf.internal.getNumberOfPages());
+
 
 const pdfBlob = pdf.output("blob");
-console.log("Blob size:", pdfBlob.size);
+
     const formData = new FormData();
     formData.append("file", pdfBlob, "Converted_Images.pdf");
-console.log("Uploading to:", `/upload_pdf/${window.selectedCaseId}`);
+
 const response = await fetch(
     `https://gentrac.onrender.com/api/drive/cases/${window.selectedCaseId}/upload-pdf`,
     {
@@ -203,10 +202,10 @@ const response = await fetch(
 );
 
 
-console.log("Upload status:", response.status);
+
 
 const result = await response.text();
-console.log(result);
+
 }
 
 
