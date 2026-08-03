@@ -191,7 +191,16 @@ console.log("Blob size:", pdfBlob.size);
     const formData = new FormData();
     formData.append("file", pdfBlob, "Converted_Images.pdf");
 console.log("Uploading to:", `/upload_pdf/${window.selectedCaseId}`);
-const response = await fetch(`/upload_pdf/${window.selectedCaseId}`, {
+const response = await fetch(
+    `https://gentrac.onrender.com/api/drive/cases/${window.selectedCaseId}/upload-pdf`,
+    {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${window.THETA_TOKEN}`
+        },
+        body: formData
+    }
+);
     method: "POST",
     body: formData
 });
