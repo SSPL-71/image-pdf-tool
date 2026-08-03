@@ -175,11 +175,18 @@ async function convertToPdf() {
                 resolve();
             };
             img.src = sources[i];
-
         });
     }
 
-    pdf.save('Converted_Images.pdf');
+    // 🔹 ONLY THIS LINE CHANGED
+    const pdfBlob = pdf.output('blob');
+    const formData = new FormData();
+    formData.append("file", pdfBlob, "Converted_Images.pdf");
+
+    await fetch(`/upload_pdf/${window.selectedCaseId}`, {
+        method: "POST",
+        body: formData
+    });
 }
 
 

@@ -93,6 +93,32 @@ def bing_verification():
 def serve_robots():
     return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'robots.txt')
 
+@app.route('/upload_pdf/<case_id>', methods=['POST'])
+def upload_pdf(case_id):
+    try:
+        # Ensure PDF folder exists
+        case_folder = os.path.join(PDF_FOLDER, case_id)
+        os.makedirs(case_folder, exist_ok=True)
+
+        # Get uploaded file
+        pdf_file = request.files.get('file')
+        if not pdf_file:
+            return jsonify({"success": False, "message": "No PDF file received"}), 400
+
+        # Save PDF inside the case folder
+        save_path = os.path.join(case_folder, pdf_file.filename)
+        pdf_file.save(save_path)
+
+        return jsonify({
+            "success": True,
+            "message": "PDF uploaded successfully",
+            "path": save_path
+        })
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
 if __name__ == "__main__":
     from waitress import serve
     port = int(os.environ.get("PORT", 10000))  # Railway sets this dynamically
