@@ -92,7 +92,8 @@ async function compressImages() {
                     fileName: originalFilenames[i] || `image_${i + 1}.jpg`
                 });
             };
-            img.src = src;
+            img.src = sources[i];
+
         });
 
         compressedImagesData.push(compressedItem);
@@ -174,7 +175,8 @@ async function convertToPdf() {
 
                 resolve();
             };
-            img.src = src;
+            img.src = sources[i];
+
         });
     }
 
