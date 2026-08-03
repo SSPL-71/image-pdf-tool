@@ -92,8 +92,7 @@ async function compressImages() {
                     fileName: originalFilenames[i] || `image_${i + 1}.jpg`
                 });
             };
-            img.src = sources[i];
-
+            img.src = src;
         });
 
         compressedImagesData.push(compressedItem);
