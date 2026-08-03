@@ -74,6 +74,17 @@
 </div>
 
 <script>
+document.getElementById("caseSelector").addEventListener("change", function () {
+    const caseId = this.value;
+
+    // Store selected case globally for PDF upload
+    window.selectedCaseId = caseId;
+
+    console.log("Selected Case ID:", window.selectedCaseId);
+});
+</script>
+
+<script>
 const params = new URLSearchParams(window.location.search);
 const token = params.get("token");
 
