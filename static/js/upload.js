@@ -185,29 +185,50 @@ async function convertToPdf() {
     // 🔹 ONLY THIS LINE CHANGED
 
 
+// Show spinner
+document.getElementById("case-loading-overlay").style.display = "flex";
+
 const pdfBlob = pdf.output("blob");
 
-    const formData = new FormData();
-    formData.append("file", pdfBlob, "Converted_Images.pdf");
+const formData = new FormData();
+formData.append("file", pdfBlob, "Converted_Images.pdf");
 
-const response = await fetch(
-    `https://gentrac.onrender.com/api/drive/cases/${window.selectedCaseId}/upload-pdf`,
-    {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${window.THETA_TOKEN}`
-        },
-        body: formData
-    }
-);
+try {
+    const response = await fetch(
+        `https://gentrac.onrender.com/api/drive/cases/${window.selectedCaseId}/upload-pdf`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${window.THETA_TOKEN}`
+            },
+            body: formData
+        }
+    );
 
+    // Hide spinner
+    document.getElementById("case-loading-overlay").style.display = "none";
 
+    // Show success toast
+    showPdfSuccessToast();
 
+    const result = await response.text();
 
-const result = await response.text();
+} catch (err) {
+    document.getElementById("case-loading-overlay").style.display = "none";
+    alert("Upload failed: " + err);
+}
+
 
 }
 
+function showPdfSuccessToast() {
+    const toast = document.getElementById("pdf-toast");
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
 
 // 🔹 Wire up buttons
 document.addEventListener('DOMContentLoaded', () => {
