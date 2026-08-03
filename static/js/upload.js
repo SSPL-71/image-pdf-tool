@@ -78,6 +78,7 @@ async function compressImages() {
         const compressedItem = await new Promise(resolve => {
             const img = new Image();
             img.onload = function () {
+    
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
@@ -152,7 +153,9 @@ async function convertToPdf() {
     for (let i = 0; i < sources.length; i++) {
         await new Promise(resolve => {
             const img = new Image();
+console.log("Loading", i);
             img.onload = function () {
+console.log("Loaded image", i);
                 let w = img.width;
                 let h = img.height;
                 const ratio = w / h;
@@ -175,6 +178,7 @@ async function convertToPdf() {
                 resolve();
             };
             img.src = sources[i];
+
         });
     }
 
