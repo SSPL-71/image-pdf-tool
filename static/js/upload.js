@@ -201,9 +201,7 @@ const response = await fetch(
         body: formData
     }
 );
-    method: "POST",
-    body: formData
-});
+
 
 console.log("Upload status:", response.status);
 
