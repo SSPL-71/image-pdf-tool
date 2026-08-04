@@ -172,30 +172,44 @@ window.loadCases = async function () {
 
       const images = await response.json();
 
-      const preview = document.getElementById("img-preview-crop");
-      preview.innerHTML = "";
+const preview = document.getElementById("img-preview-crop");
+preview.innerHTML = "";
 
-      for (const image of images) {
-        const imgWrap = document.createElement("div");
-        imgWrap.className = "img-wrap";
+let index = 0;
 
-        const img = document.createElement("img");
+for (const image of images) {
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "img-wrap";
 
-        const imageResponse = await fetch(
-          `https://gentrac.onrender.com/api/drive/image/${image.id}`,
-          { headers: { Authorization: `Bearer ${window.THETA_TOKEN}` } }
-        );
+    // ✅ Checkbox for selection
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "img-select";
+    checkbox.dataset.index = index;
 
-        const blob = await imageResponse.blob();
-        img.src = URL.createObjectURL(blob);
-        img.loading = "lazy";
+    const img = document.createElement("img");
+    img.dataset.index = index;  // so we can find it later by index
 
-        imgWrap.appendChild(img);
-        preview.appendChild(imgWrap);
+    const imageResponse = await fetch(
+      `https://gentrac.onrender.com/api/drive/image/${image.id}`,
+      { headers: { Authorization: `Bearer ${window.THETA_TOKEN}` } }
+    );
 
-        // 🔥 IMPORTANT: Initialize cropper for Theta-only workflow
-        initializeCropperOn(img, image.filename || "case_image.jpg");
-      }
+    const blob = await imageResponse.blob();
+    img.src = URL.createObjectURL(blob);
+    img.loading = "lazy";
+
+    // ✅ Order: checkbox + image
+    imgWrap.appendChild(checkbox);
+    imgWrap.appendChild(img);
+    preview.appendChild(imgWrap);
+
+    // (we will later change this to only init cropper on selected images)
+    initializeCropperOn(img, image.filename || "case_image.jpg");
+
+    index++;
+}
+
     });
 
   } catch (err) {
