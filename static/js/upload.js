@@ -89,26 +89,17 @@ function cropImages() {
         return;
     }
 
-    // 🔹 Reset cropper instances
-    cropperInstances = [];
-    croppedImagesData = [];
+    // 🔹 Crop ONLY selected cropper instances
+    croppedImagesData = selectedIndexes
+        .map(i => {
+            const cropper = cropperInstances[i];
+            if (!cropper) return null;
 
-    // 🔹 Initialize cropper ONLY on selected images
-    selectedIndexes.forEach(i => {
-        const img = document.querySelector(`img[data-index="${i}"]`);
-        const filename = originalFilenames[i] || `image_${i + 1}.jpg`;
-        initializeCropperOn(img, filename);
-    });
-
-    // 🔹 Perform cropping
-    croppedImagesData = cropperInstances
-        .map(cropper => {
             const canvas = cropper.getCroppedCanvas();
             return canvas ? canvas.toDataURL('image/jpeg') : null;
         })
         .filter(Boolean);
 
-    // 🔹 Show cropped images in compression stage
     const imgPreviewCompress = document.getElementById('img-preview-compress');
     imgPreviewCompress.innerHTML = croppedImagesData.map(data => `
         <div class="img-wrap"><img src="${data}"></div>
