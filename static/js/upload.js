@@ -4,6 +4,34 @@ let originalFilenames = [];
 let compressedImagesData = [];  
 let compressionCompleted = false;
 
+// 🔹 Selection logic (max 10 images)
+let selectedCount = 0;
+
+document.addEventListener("change", (e) => {
+    if (e.target.classList.contains("img-select")) {
+
+        if (e.target.checked) {
+            if (selectedCount >= 10) {
+                e.target.checked = false;
+                alert("You can select only 10 images at a time.");
+                return;
+            }
+            selectedCount++;
+        } else {
+            selectedCount--;
+        }
+
+        updateSelectionCounter();
+    }
+});
+
+function updateSelectionCounter() {
+    const counter = document.getElementById("selection-counter");
+    if (counter) {
+        counter.textContent = `${selectedCount} / 10 selected`;
+    }
+}
+
 
 // 🔹 Initialize cropper on GenTrac-loaded images
 function initializeCropperOn(img, filename = "image.jpg") {
@@ -46,6 +74,33 @@ function initializeCropperOn(img, filename = "image.jpg") {
 
 // 🔹 Crop all GenTrac images
 function cropImages() {
+
+    // 🔹 Get selected image indexes
+    const selectedIndexes = [...document.querySelectorAll(".img-select:checked")]
+        .map(cb => parseInt(cb.dataset.index));
+
+    if (selectedIndexes.length === 0) {
+        alert("Please select at least one image.");
+        return;
+    }
+
+    if (selectedIndexes.length > 10) {
+        alert("You can crop only 10 images at a time.");
+        return;
+    }
+
+    // 🔹 Reset cropper instances
+    cropperInstances = [];
+    croppedImagesData = [];
+
+    // 🔹 Initialize cropper ONLY on selected images
+    selectedIndexes.forEach(i => {
+        const img = document.querySelector(`img[data-index="${i}"]`);
+        const filename = originalFilenames[i] || `image_${i + 1}.jpg`;
+        initializeCropperOn(img, filename);
+    });
+
+    // 🔹 Perform cropping
     croppedImagesData = cropperInstances
         .map(cropper => {
             const canvas = cropper.getCroppedCanvas();
@@ -53,6 +108,7 @@ function cropImages() {
         })
         .filter(Boolean);
 
+    // 🔹 Show cropped images in compression stage
     const imgPreviewCompress = document.getElementById('img-preview-compress');
     imgPreviewCompress.innerHTML = croppedImagesData.map(data => `
         <div class="img-wrap"><img src="${data}"></div>
@@ -60,6 +116,7 @@ function cropImages() {
 
     document.getElementById('post-compress-choice').style.display = 'none';
 }
+
 
 
 // 🔹 Compress cropped images

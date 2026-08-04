@@ -206,7 +206,7 @@ imgWrap.appendChild(checkbox);
     preview.appendChild(imgWrap);
 
     // (we will later change this to only init cropper on selected images)
-    initializeCropperOn(img, image.filename || "case_image.jpg");
+    
 
     index++;
 }
@@ -228,6 +228,14 @@ imgWrap.appendChild(checkbox);
       <div id="thetaCropPlaceholder" style="margin-bottom:15px; color:#9ca3af;">
         Images from the selected case will appear here.
       </div>
+
+<div id="selection-counter" style="
+    font-weight:600;
+    margin-bottom:10px;
+    color:#4da6ff;
+">
+    0 / 10 selected
+</div>
 
       <div class="img-container" id="img-preview-crop"></div>
 
