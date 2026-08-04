@@ -32,6 +32,17 @@ function updateSelectionCounter() {
     }
 }
 
+function deselectAllImages() {
+    const checkboxes = document.querySelectorAll(".img-select:not(:disabled)");
+
+    checkboxes.forEach(cb => {
+        cb.checked = false;
+    });
+
+    selectedCount = 0;
+    updateSelectionCounter();
+}
+
 
 // 🔹 Initialize cropper on GenTrac-loaded images
 function initializeCropperOn(img, filename = "image.jpg") {
@@ -106,6 +117,47 @@ function cropImages() {
     `).join('');
 
     document.getElementById('post-compress-choice').style.display = 'none';
+
+// 🔹 Mark selected images as done
+selectedIndexes.forEach(i => {
+    const wrap = document.querySelector(`img[data-index="${i}"]`).parentElement;
+
+    wrap.classList.add("done");
+
+    // Add badge
+    const badge = document.createElement("div");
+    badge.className = "done-badge";
+    badge.textContent = "✓ Cropped";
+    wrap.appendChild(badge);
+
+    // Disable checkbox
+    const cb = wrap.querySelector(".img-select");
+    if (cb) {
+        cb.checked = false;
+        cb.disabled = true;
+    }
+});
+
+// Reset selection counter
+selectedCount = 0;
+updateSelectionCounter();
+
+
+    // Add badge
+    const badge = document.createElement("div");
+    badge.className = "done-badge";
+    badge.textContent = "✓ Cropped";
+    wrap.appendChild(badge);
+
+    // Optional: disable checkbox
+    const cb = wrap.querySelector(".img-select");
+    if (cb) {
+        cb.checked = false;
+        cb.disabled = true;
+    }
+});
+
+
 }
 
 

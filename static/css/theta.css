@@ -270,4 +270,23 @@ footer {
 .img-wrap img {
     display: block;
 }
+.img-wrap.done {
+    border: 3px solid #4da6ff;
+    border-radius: 10px;
+    position: relative;
+    opacity: 0.85;
+}
+
+.img-wrap .done-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #4da6ff;
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    z-index: 20;
+}
 
