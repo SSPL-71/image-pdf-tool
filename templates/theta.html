@@ -200,8 +200,9 @@ for (const image of images) {
     img.loading = "lazy";
 
     // ✅ Order: checkbox + image
-    imgWrap.appendChild(checkbox);
-    imgWrap.appendChild(img);
+imgWrap.appendChild(img);
+imgWrap.appendChild(checkbox);
+
     preview.appendChild(imgWrap);
 
     // (we will later change this to only init cropper on selected images)
