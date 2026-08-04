@@ -321,4 +321,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('download-compressed-btn').addEventListener('click', downloadCompressedImages);
     document.getElementById('proceed-to-pdf-btn').addEventListener('click', proceedToPdf);
     document.getElementById('pdf-button').addEventListener('click', convertToPdf);
+document.getElementById('deselect-all-btn').addEventListener('click', deselectAllImages);
 });
