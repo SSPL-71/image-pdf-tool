@@ -141,24 +141,8 @@ selectedIndexes.forEach(i => {
 // Reset selection counter
 selectedCount = 0;
 updateSelectionCounter();
-
-
-    // Add badge
-    const badge = document.createElement("div");
-    badge.className = "done-badge";
-    badge.textContent = "✓ Cropped";
-    wrap.appendChild(badge);
-
-    // Optional: disable checkbox
-    const cb = wrap.querySelector(".img-select");
-    if (cb) {
-        cb.checked = false;
-        cb.disabled = true;
-    }
-});
-
-
 }
+
 
 
 
