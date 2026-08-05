@@ -290,3 +290,40 @@ footer {
     z-index: 20;
 }
 
+/* === Thank You Banner === */
+.thank-banner {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid rgba(250, 204, 21, 0.75);
+  box-shadow: 0 0 22px rgba(250, 204, 21, 0.4);
+  border-radius: 10px;
+  color: #fef3c7;
+}
+
+.thank-banner a {
+  color: #fde68a;
+  text-decoration: underline;
+}
+
+.thank-banner button {
+  margin-left: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: #020617;
+  color: #e5e7eb;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+@keyframes sparkleFade {
+  0% { opacity: 0; transform: scale(0.95); }
+  50% { opacity: 0.5; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
