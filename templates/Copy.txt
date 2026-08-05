@@ -63,72 +63,15 @@
 </div>
 
 <!-- 3CTool Intro Video -->
-<div class="box" style="max-width:700px;margin:30px auto;">
-
-    <button
-        id="toggleVideoBtn"
-        type="button"
-        style="
-            width:100%;
-            padding:14px;
-            border:none;
-            border-radius:10px;
-            background:#111827;
-            color:white;
-            font-size:16px;
-            font-weight:600;
-            cursor:pointer;
-        ">
-        ▶ New to 3CTool? Watch the 2-minute Quick Start
-    </button>
-
-    <div
-        id="introVideoContainer"
-        style="
-            display:none;
-            margin-top:20px;
-            text-align:center;
-        ">
-
-        <div style="aspect-ratio:9/16;max-width:300px;margin:auto;">
-            <video
-                controls
-                playsinline
-                style="
-                    width:100%;
-                    height:100%;
-                    border-radius:12px;
-                    object-fit:cover;
-                ">
-                <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-    </div>
-
+<div style="width: 100%; text-align: center; margin: 40px 0;">
+  <h2 style="color: #333;">🎥 See 3CTool in Action</h2>
+  <div style="aspect-ratio: 9 / 16; max-width: 300px; margin: auto;">
+    <video controls playsinline style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
+      <source src="{{ url_for('static', filename='videos/3CTool.mp4') }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 </div>
-
-<script>
-document.getElementById("toggleVideoBtn").addEventListener("click", function () {
-
-    const video = document.getElementById("introVideoContainer");
-
-    if (video.style.display === "none") {
-
-        video.style.display = "block";
-        this.innerHTML = "▼ Hide Quick Start Video";
-
-    } else {
-
-        video.style.display = "none";
-        this.innerHTML = "▶ New to 3CTool? Watch the 2-minute Quick Start";
-
-    }
-
-});
-</script>
-
 <!-- Thank You Banner -->
 <div id="thankYouBanner" style="display:none;" class="thank-banner">
   🙏 Thank you, visitor from <strong id="userCity">your city</strong>!<br>
