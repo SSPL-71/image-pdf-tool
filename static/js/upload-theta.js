@@ -193,20 +193,30 @@ async function compressImages() {
 }
 
 
+// 🔹 Download compressed images
+function downloadCompressedImages() {
+    compressedImagesData.forEach(item => {
+        fetch(item.data)
+            .then(res => res.blob())
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = item.fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+    });
+}
+
 
 // 🔹 Move compressed images to PDF stage
 function proceedToPdf() {
     const imgPreviewPdf = document.getElementById('img-preview-pdf');
 
     imgPreviewPdf.innerHTML = compressedImagesData.map(item => `
-        <div class="img-wrap img-sortable">
-            <img src="${item.data}">
-        </div>
+        <div class="img-wrap"><img src="${item.data}"></div>
     `).join('');
-
-    new Sortable(imgPreviewPdf, {
-        animation: 150
-    });
 }
 
 
