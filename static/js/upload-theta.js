@@ -195,6 +195,8 @@ async function compressImages() {
 
 // 🔹 Download compressed images
 function proceedToPdf() {
+
+console.log("proceedToPdf called");
     const imgPreviewPdf = document.getElementById('img-preview-pdf');
 
     imgPreviewPdf.innerHTML = compressedImagesData.map(item => `
