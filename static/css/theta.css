@@ -329,3 +329,31 @@ footer {
   100% { opacity: 1; transform: scale(1); }
 }
 
+/* ================================
+   PDF Preview - Drag & Drop Sorting
+   ================================ */
+
+#img-preview-pdf .img-wrap {
+    cursor: grab;
+    transition: transform 0.15s ease;
+}
+
+#img-preview-pdf .img-wrap:hover {
+    transform: scale(1.02);
+}
+
+#img-preview-pdf .img-wrap:active {
+    cursor: grabbing;
+}
+
+#img-preview-pdf .sortable-ghost {
+    opacity: 0.4;
+}
+
+#img-preview-pdf .sortable-chosen {
+    transform: scale(1.04);
+}
+
+#img-preview-pdf .sortable-drag {
+    opacity: 0.9;
+}
