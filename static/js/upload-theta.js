@@ -193,27 +193,6 @@ async function compressImages() {
 }
 
 
-// 🔹 Download compressed images
-function proceedToPdf() {
-
-console.log("proceedToPdf called");
-    const imgPreviewPdf = document.getElementById('img-preview-pdf');
-
-    imgPreviewPdf.innerHTML = compressedImagesData.map(item => `
-        <div class="img-wrap img-sortable">
-            <img src="${item.data}">
-        </div>
-    `).join('');
-
-    if (imgPreviewPdf._sortable) {
-        imgPreviewPdf._sortable.destroy();
-    }
-
-    imgPreviewPdf._sortable = new Sortable(imgPreviewPdf, {
-        animation: 150
-    });
-}
-
 
 // 🔹 Move compressed images to PDF stage
 function proceedToPdf() {
