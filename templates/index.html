@@ -545,7 +545,32 @@ window.loadCases = async function () {
   <footer>
     © 2026 Sarvasiddhanta Services Private Limited (SSPL). All rights reserved.
   </footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+    const preview = document.getElementById("img-preview-pdf");
+
+    const observer = new MutationObserver(() => {
+
+        if (preview.children.length > 0) {
+
+            if (preview._sortable) {
+                preview._sortable.destroy();
+            }
+
+            preview._sortable = new Sortable(preview, {
+                animation: 150
+            });
+
+        }
+    });
+
+    observer.observe(preview, {
+        childList: true
+    });
+
+});
+</script>
 
 </body>
 </html>
