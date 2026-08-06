@@ -330,7 +330,32 @@ imgWrap.appendChild(checkbox);
 <!-- Toast message -->
 <div id="pdf-toast">PDF Uploaded to case folder</div>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+    const preview = document.getElementById("img-preview-pdf");
+
+    const observer = new MutationObserver(() => {
+
+        if (preview.children.length > 0) {
+
+            if (preview._sortable) {
+                preview._sortable.destroy();
+            }
+
+            preview._sortable = new Sortable(preview, {
+                animation: 150
+            });
+
+        }
+    });
+
+    observer.observe(preview, {
+        childList: true
+    });
+
+});
+</script>
 
 </body>
 </html>
